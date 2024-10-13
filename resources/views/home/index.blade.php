@@ -3,7 +3,15 @@
 <head>
 
     @include('home.css')
-
+{{-- 
+    <style>
+        #pills-tab {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style> --}}
+    
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
     

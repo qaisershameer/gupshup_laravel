@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 
+use App\Models\Food;
+
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -13,7 +15,10 @@ class HomeController extends Controller
 
     public function my_home()
     {
-        return view('home.index');
+
+        $data = Food::all();
+
+        return view('home.index', compact('data'));
     }
 
     public function index()
@@ -28,7 +33,8 @@ class HomeController extends Controller
             }
             else
             {
-                return view('home.index');
+                $data = Food::all();
+                return view('home.index', compact('data'));
             }
 
         }
