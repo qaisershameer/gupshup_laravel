@@ -48,10 +48,18 @@
                                 <p class="text-white">{{$data->detail}} </p>
                             </div>
 
-                            <form action="">
-                                <input type="number" min="1">
-                                <input class="btn btn-danger" type="submit" value="ADD TO CARD">
+                            <form action="{{url('add_cart',$data->id)}}" method="post">
+                                
+                                @csrf
+
+                                <input type="number" value="1" min="1" name="qty" required>
+                                
+                                <input class="btn btn-danger" type="submit" value="ADD TO CART">
+
                             </form>
+                            
+                            </br></br></br>
+
                         </div>
                     </div>
                 @endforeach

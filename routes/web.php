@@ -22,6 +22,8 @@ Route::post('/edit_food/{id}',[AdminController::class,'edit_food']);        // t
 
 Route::get('/delete_food/{id}',[AdminController::class,'delete_food']);    // to delete record from table via delete_food route
 
+Route::post('/add_cart/{id}',[HomeController::class,'add_cart']);        // to update record in table via edit_food route
+
 Route::middleware([
     
     'auth:sanctum',
