@@ -13,7 +13,7 @@
                 <li class="active"><a href="index.html"> <i class="icon-home"></i>Home </a></li>
                 <li><a href="tables.html"> <i class="icon-grid"></i>Tables </a></li>
                 <li><a href="charts.html"> <i class="fa fa-bar-chart"></i>Charts </a></li>
-                <li><a href="forms.html"> <i class="icon-padnote"></i>Orders </a></li>
+                <li><a href="{{url('orders')}}"> <i class="icon-padnote"></i>Orders </a></li>
                 <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>GupShup Menu </a>
                   <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
                     <li><a href="{{url('add_food')}}">Add Food</a></li>
