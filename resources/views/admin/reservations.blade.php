@@ -3,7 +3,6 @@
   <head> 
     
     @include('admin.css')
-
     <style>
         table
         {
@@ -17,7 +16,7 @@
             font-weight: bold;
             font-size: 14px;
             text-align: center;
-            background-color: red;
+            background-color: green;
             padding: 10px;
         }
         td
@@ -28,7 +27,6 @@
             padding: 10px;
         }
     </style>
-
   </head>
   <body>
     
@@ -42,33 +40,27 @@
 
             <table>
                 <tr>
-                    <th> Customer Name </th>
-                    <th> Email </th>
-                    <th> Phone </th>
-                    <th> Address </th>
-                    <th> Product </th>
-                    <th> Qty </th>
-                    <th> Price </th>
-                    <th> Image </th>
+                    <th> Phone Number </th>
+                    <th> No of Guests </th>
+                    <th> Time </th>
+                    <th> Date </th>
+                    <th> Special Instructions </th>
                     <th> Status </th>
                     <th> Change Status </th>
                 </tr>
 
                 @foreach ($data as $data)                                    
                     <tr>
-                        <td> {{$data->name}} </td>
-                        <td> {{$data->email}} </td>
                         <td> {{$data->phone}} </td>
-                        <td> {{$data->address}} </td>
-                        <td> {{$data->title}} </td>
-                        <td> {{$data->qty}} </td>
-                        <td> {{$data->price}} </td>
-                        <td> <img width="100px" height="100px" src="food_img/{{$data->image}}" alt="">  </td>
-                        <td> {{$data->delivery_status}} </td>
+                        <td> {{$data->guest}} </td>
+                        <td> {{$data->time}} </td>
+                        <td> {{$data->date}} </td>
+                        <td> {{$data->note}} </td>
+                        <td> {{$data->status}} </td>
                         <td>
-                            <a onclick="return confirm('Are you sure to change this')" class="btn btn-warning" href="{{url('on_the_way', $data->id)}}">On the way</a>
-                            <a onclick="return confirm('Are you sure to change this')" class="btn btn-success" href="{{url('delivered', $data->id)}}">Delivered</a>
-                            <a onclick="return confirm('Are you sure to change this')" class="btn btn-danger" href="{{url('cancelled', $data->id)}}">Cancelled</a>
+                            <a onclick="return confirm('Are you sure to change this')" class="btn btn-warning" href="{{url('table_pending', $data->id)}}">Pending</a>
+                            <a onclick="return confirm('Are you sure to change this')" class="btn btn-success" href="{{url('table_confirm', $data->id)}}">Confirmed</a>
+                            <a onclick="return confirm('Are you sure to change this')" class="btn btn-danger" href="{{url('table_cancelled', $data->id)}}">Cancelled</a>
                         </td>                        
                     </tr>
                 @endforeach

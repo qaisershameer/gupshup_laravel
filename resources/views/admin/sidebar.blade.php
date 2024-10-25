@@ -11,8 +11,8 @@
         <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
         <ul class="list-unstyled">
                 <li class="active"><a href="index.html"> <i class="icon-home"></i>Home </a></li>
-                <li><a href="tables.html"> <i class="icon-grid"></i>Tables </a></li>
-                <li><a href="charts.html"> <i class="fa fa-bar-chart"></i>Charts </a></li>
+                <li><a href="#"> <i class="icon-grid"></i>Bookings </a></li>
+                <li><a href="{{url('reservations')}}"> <i class="fa fa-ticket"></i>Reservations </a></li>
                 <li><a href="{{url('orders')}}"> <i class="icon-padnote"></i>Orders </a></li>
                 <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>GupShup Menu </a>
                   <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
@@ -29,12 +29,14 @@
                     <li><a href="#">BURGERS</a></li>
                   </ul>
                 </li>
+
                 <li><a href="login.html"> <i class="icon-logout"></i>Login page </a></li>
-        </ul><span class="heading">Extras</span>
+
+        </ul><span class="heading">Extras</span>        
         <ul class="list-unstyled">
-          <li> <a href="#"> <i class="icon-settings"></i>Demo </a></li>
-          <li> <a href="#"> <i class="icon-writing-whiteboard"></i>Demo </a></li>
-          <li> <a href="#"> <i class="icon-chart"></i>Demo </a></li>
+          <li> <a href="#"> <i class="icon-settings"></i>Settings </a></li>
+          <li> <a href="#"> <i class="icon-writing-whiteboard"></i>Project View </a></li>
+          <li> <a href="#"> <i class="icon-chart"></i>Financial Stats </a></li>
         </ul>
       </nav>
       <!-- Sidebar Navigation end-->

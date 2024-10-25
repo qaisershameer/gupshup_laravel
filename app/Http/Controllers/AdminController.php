@@ -8,6 +8,8 @@ use App\Models\Food;
 
 use App\Models\Order;
 
+use App\Models\Book;
+
 class AdminController extends Controller
 {
     public function add_food()
@@ -142,5 +144,50 @@ class AdminController extends Controller
         return redirect()->back();
 
     }    
+
+    public function reservations()
+    {
+        $data = Book::all();
+        return view('admin.reservations', compact('data')); 
+    }
+
+    public function table_confirm($id)
+    {
+
+        $data = Book::find($id);
+
+        $data->status = 'Confirmed';
+
+        $data->save();
+
+        return redirect()->back();
+
+    }
+
+    public function table_pending($id)
+    {
+
+        $data = Book::find($id);
+
+        $data->status = 'Pendig';
+
+        $data->save();
+
+        return redirect()->back();
+
+    }
+
+    public function table_cancelled($id)
+    {
+
+        $data = Book::find($id);
+
+        $data->status = 'Cancelled';
+
+        $data->save();
+
+        return redirect()->back();
+
+    }
 
 }

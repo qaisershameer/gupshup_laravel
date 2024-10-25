@@ -14,6 +14,8 @@ use App\Models\Cart;
 
 use App\Models\Order;
 
+use App\Models\Book;
+
 class HomeController extends Controller
 {
 
@@ -141,6 +143,27 @@ class HomeController extends Controller
             $data->delete();
 
         }
+
+        return redirect()->back();
+
+    }
+
+    public function book_table(Request $request)
+    {
+
+        $data = new Book;
+
+        $data->phone = $request->phone;
+
+        $data->guest = $request->guest;        
+
+        $data->time = $request->time;
+
+        $data->date = $request->date;
+
+        $data->note = $request->note;
+
+        $data->save();
 
         return redirect()->back();
 
