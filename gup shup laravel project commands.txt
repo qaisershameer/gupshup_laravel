@@ -1,0 +1,53 @@
+composer create-project laravel/laravel gupshup			// create gup shup project using cmd in c:\xampp\htdocs\gupshup
+
+cd gupshup						// go to laravel created project directory
+
+composer require laravel/jetstream				// run this command to download jetstream package
+
+php artisan jetstream:install livewire				// run this command to install livewire in project directory
+
+npm install						// this will install npm in project directory
+
+npm run build						// this command will run npm run build package
+
+open project in VS Code Editor
+
+add 3 fileds in database->migrations->create_users_table		// usertype->default('user') , phone->nullable, address0>nullable
+
+php artisan migrate						// run this command to migrate 10 tables
+
+add 2 input fields in resources->views-> auth->register.blade.php 	// phone & address input fields after email
+
+add 2 input fields in app->actions-> fortify->CreateNewUser.php 	// phone & address input fields after email
+
+add 2 input fields in app->Models-> User.php			 // phone & address input fields after email in $fillable function
+
+app->config->fortify.php					// change the  'home' => '/dashboard', to  'home' => '/home',
+
+php artisan make:controller HomeController			// will create HomeController for Route Entry in Web
+
+use App\Http\Controllers\HomeController;			// add this controller in resource->routes->web.php
+
+Route::get('/home',[HomeController::class,'index']);			// add this Route for HomeController in resource->routes->web.php
+
+public funtion index() { }					// add public function in HomeController.php for routes base on user type in 
+
+use App\Models\User;					// include library User this in HomeController.php
+
+use Illuminate\Support\Facades\Auth;				// include library Auth this in HomeController.php
+
+resource	view  create new folder admin				// for admin files & css
+
+php artisan make:controller AdminController			// will create HomeController for Route Entry in Web
+
+Route::get('/add_food',[AdminController::class,'add_food']);		// new route entry for add food
+
+use App\Http\Controllers\AdminController;			// add in top of web.php to work with Route on Admin Controller
+
+php artisan make:model Food -m				// will create Food mode & migration with all basic crud functions
+
+php artisan migrate						// run this command to migrate 11 tables
+
+https://www.youtube.com/watch?v=CuuuuHasSso&list=PLm8sgxwSZofcG-Dcf634oCKB4Jx0j-Bmz&index=7	time 15:25 pm
+
+php artisan make:migration add_userid_field_to_carts		// add extra field to existing table

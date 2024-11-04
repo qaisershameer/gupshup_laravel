@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2024 at 07:01 AM
+-- Generation Time: Nov 04, 2024 at 07:06 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,8 +67,8 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('c525a5357e97fef8d3db25841c86da1a', 'i:1;', 1729828175),
-('c525a5357e97fef8d3db25841c86da1a:timer', 'i:1729828175;', 1729828175),
+('c525a5357e97fef8d3db25841c86da1a', 'i:1;', 1730743462),
+('c525a5357e97fef8d3db25841c86da1a:timer', 'i:1730743462;', 1730743462),
 ('e10fd735ad88f21f45ee9e47870c152d', 'i:1;', 1729831388),
 ('e10fd735ad88f21f45ee9e47870c152d:timer', 'i:1729831388;', 1729831388);
 
@@ -300,8 +300,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('92p46vUmrnfbynzEUx984KU9BAkGTcBwNTKYw8TU', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiaWc4QTNFRWtzZWVRbFY5NG5iaXp3SkFNS3NLM09mRFBXbk1WVGFQNSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjg6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9vcmRlcnMiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1729831249),
-('MQSr9kZ28TTmCB2lkTiKMADR1nPlRsdbI41ALlOk', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiY1RyQTZGUnVGWVRrSXpPaU1hVGp3SXJ1QnNYVU1WbFNCSG1zOHNpeCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ob21lIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mzt9', 1729831329);
+('wHxigCnfqMSFAgi6YyaOdkHb5dZIC123eIlbsKqY', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiMzBvTDJPSzRqdWp0RXcxNDA1ZnhzaFp1ZlY3WUV5TlA3QjJZU3hyayI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yZXNlcnZhdGlvbnMiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1730743552);
 
 -- --------------------------------------------------------
 
@@ -333,9 +332,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `usertype`, `phone`, `address`, `email_verified_at`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `current_team_id`, `profile_photo_path`, `created_at`, `updated_at`) VALUES
-(1, 'sadmin', 'sadmin@gmail.com', 'admin', '+923346013608', 'Multan Punjab Pakistan', NULL, '$2y$12$jhYBiKeCVKRN5xor3KGIE.sDNUpcD.46VHTnLwkhlDmrvsefSINwW', NULL, NULL, NULL, '4ihQEIBtBR2SfSUWokOj8q7BLtV28GcxHr2jevgqMm682vbwV4kFkNMd4s2J', NULL, NULL, '2024-10-09 11:23:17', '2024-10-09 11:23:17'),
-(2, 'admin', 'admin@gmail.com', 'admin', '+923136336807', 'Moza Wan Chattah', NULL, '$2y$12$oo9B3dcgbyiLmcucNjIqP.gWyzq/E6UzhpWws/ruzoKz1VnqcpDk.', NULL, NULL, NULL, 'Ncm3Qx9oAI0cstyLlhmRqoqFyjXw0Pv3nUZnC7f4mTZSW2ed8PbPmGACB3MO', NULL, NULL, '2024-10-09 11:29:44', '2024-10-09 11:29:44'),
-(3, 'user1', 'user1@gmail.com', 'user', '+923477072247', 'Multan Punjab Pakistan', NULL, '$2y$12$jhYBiKeCVKRN5xor3KGIE.sDNUpcD.46VHTnLwkhlDmrvsefSINwW', NULL, NULL, NULL, 'hdcmqncSdRcHFpVSncHnsK6q9Bzkhdqs5SBwhlYsPgo1zDbrUmv0ZiXRa9qO', NULL, NULL, '2024-10-09 11:23:17', '2024-10-09 11:23:17');
+(1, 'sadmin', 'admin@gmail.com', 'admin', '+923346013608', 'Multan Punjab Pakistan', NULL, '$2y$12$jhYBiKeCVKRN5xor3KGIE.sDNUpcD.46VHTnLwkhlDmrvsefSINwW', NULL, NULL, NULL, '4ihQEIBtBR2SfSUWokOj8q7BLtV28GcxHr2jevgqMm682vbwV4kFkNMd4s2J', NULL, NULL, '2024-10-09 11:23:17', '2024-10-09 11:23:17'),
+(2, 'admin', 'user1@gmail.com', 'user', '+923136336807', 'Moza Wan Chattah', NULL, '$2y$12$oo9B3dcgbyiLmcucNjIqP.gWyzq/E6UzhpWws/ruzoKz1VnqcpDk.', NULL, NULL, NULL, 'lkmTknkEJKcpBqHIEEoqsOdaC5Kz8T9aRVnQRYDYrKAGb1ZtHq5QabiZVUKB', NULL, NULL, '2024-10-09 11:29:44', '2024-10-09 11:29:44'),
+(3, 'user1', 'user2@gmail.com', 'user', '+923477072247', 'Multan Punjab Pakistan', NULL, '$2y$12$jhYBiKeCVKRN5xor3KGIE.sDNUpcD.46VHTnLwkhlDmrvsefSINwW', NULL, NULL, NULL, 'hdcmqncSdRcHFpVSncHnsK6q9Bzkhdqs5SBwhlYsPgo1zDbrUmv0ZiXRa9qO', NULL, NULL, '2024-10-09 11:23:17', '2024-10-09 11:23:17');
 
 --
 -- Indexes for dumped tables
