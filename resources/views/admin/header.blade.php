@@ -1,4 +1,7 @@
 <header class="header">   
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <nav class="navbar navbar-expand-lg">
       <div class="search-panel">
         <div class="search-inner d-flex align-items-center justify-content-center">
@@ -70,70 +73,65 @@
           <div class="list-inline-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="nav-link">Mega <i class="fa fa-ellipsis-v"></i></a>
             <div class="dropdown-menu megamenu">
               <div class="row">
-                <div class="col-lg-3 col-md-6"><strong class="text-uppercase">Elements Heading</strong>
+                <div class="col-lg-3 col-md-6"><strong class="text-uppercase">General</strong>
                   <ul class="list-unstyled mb-3">
-                    <li><a href="#">Lorem ipsum dolor</a></li>
-                    <li><a href="#">Sed ut perspiciatis</a></li>
-                    <li><a href="#">Voluptatum deleniti</a></li>
-                    <li><a href="#">At vero eos</a></li>
-                    <li><a href="#">Consectetur adipiscing</a></li>
-                    <li><a href="#">Duis aute irure</a></li>
-                    <li><a href="#">Necessitatibus saepe</a></li>
-                    <li><a href="#">Maiores alias</a></li>
+                    <li><a href="{{url('accounts')}}">Accounts</a></li>
+                    <li><a href="{{url('acctype')}}">A/c Types</a></li>
+                    <li><a href="{{url('accparent')}}">A/c Parents</a></li>
+                    <li><a href="{{url('area')}}">Areas</a></li>
+                    <li><a href="{{url('currency')}}">Currencies</a></li>
                   </ul>
                 </div>
-                <div class="col-lg-3 col-md-6"><strong class="text-uppercase">Elements Heading</strong>
+                <div class="col-lg-3 col-md-6"><strong class="text-uppercase">Vouchers</strong>
                   <ul class="list-unstyled mb-3">
-                    <li><a href="#">Lorem ipsum dolor</a></li>
-                    <li><a href="#">Sed ut perspiciatis</a></li>
-                    <li><a href="#">Voluptatum deleniti</a></li>
-                    <li><a href="#">At vero eos</a></li>
-                    <li><a href="#">Consectetur adipiscing</a></li>
-                    <li><a href="#">Duis aute irure</a></li>
-                    <li><a href="#">Necessitatibus saepe</a></li>
-                    <li><a href="#">Maiores alias</a></li>
+                    <li><a href="{{url('crv')}}">Receipts</a></li>
+                    <li><a href="{{url('cpv')}}">Payments</a></li>
+                    <li><a href="{{url('jv')}}">Journal Jv</a></li>
+                    <li><a href="{{url('/home')}}">Purchases</a></li>
+                    <li><a href="{{url('/home')}}">Sales</a></li>
+                    <li><a href="{{url('/home')}}">Stock In</a></li>
+                    <li><a href="{{url('/home')}}">Stock Out</a></li>
                   </ul>
                 </div>
-                <div class="col-lg-3 col-md-6"><strong class="text-uppercase">Elements Heading</strong>
+                <div class="col-lg-3 col-md-6"><strong class="text-uppercase">Reports</strong>
                   <ul class="list-unstyled mb-3">
-                    <li><a href="#">Lorem ipsum dolor</a></li>
-                    <li><a href="#">Sed ut perspiciatis</a></li>
-                    <li><a href="#">Voluptatum deleniti</a></li>
-                    <li><a href="#">At vero eos</a></li>
-                    <li><a href="#">Consectetur adipiscing</a></li>
-                    <li><a href="#">Duis aute irure</a></li>
-                    <li><a href="#">Necessitatibus saepe</a></li>
-                    <li><a href="#">Maiores alias</a></li>
+                    <li><a href="{{url('ac_ledger')}}">A/c Ledger</a></li>
+                    <li><a href="{{url('cash_book')}}">Cash Book</a></li>
+                    <li><a href={{url('trial_balance')}}">Trial Balance</a></li>
+                    <li><a href="{{url('/home')}}">Transactions</a></li>
+                    <li><a href="{{url('/home')}}">Income Statement</a></li>
+                    <li><a href="{{url('/home')}}">Balance Sheet</a></li>
                   </ul>
                 </div>
-                <div class="col-lg-3 col-md-6"><strong class="text-uppercase">Elements Heading</strong>
+                <div class="col-lg-3 col-md-6"><strong class="text-uppercase">Settings</strong>
                   <ul class="list-unstyled mb-3">
-                    <li><a href="#">Lorem ipsum dolor</a></li>
-                    <li><a href="#">Sed ut perspiciatis</a></li>
-                    <li><a href="#">Voluptatum deleniti</a></li>
-                    <li><a href="#">At vero eos</a></li>
-                    <li><a href="#">Consectetur adipiscing</a></li>
-                    <li><a href="#">Duis aute irure</a></li>
-                    <li><a href="#">Necessitatibus saepe</a></li>
-                    <li><a href="#">Maiores alias</a></li>
+                    <li><a href="{{url('/home')}}">DarK Theme</a></li>
+                    <li><a href="{{url('/home')}}">Blocked Users</a></li>
+                    <li><a href="{{url('/home')}}">Date Closing</a></li>
+                    <li><a href="{{url('/home')}}">Backup</a></li>
+                    <li><a href="{{url('/home')}}">Default Printer</a></li>
+                    <li><a href="{{url('/home')}}">App Configruation</a></li>
+                    <li><a href="{{url('/home')}}">Account Configuration</a></li>
                   </ul>
                 </div>
               </div>
               <div class="row megamenu-buttons text-center">
-                <div class="col-lg-2 col-md-4"><a href="#" class="d-block megamenu-button-link dashbg-1"><i class="fa fa-clock-o"></i><strong>Demo 1</strong></a></div>
-                <div class="col-lg-2 col-md-4"><a href="#" class="d-block megamenu-button-link dashbg-2"><i class="fa fa-clock-o"></i><strong>Demo 2</strong></a></div>
-                <div class="col-lg-2 col-md-4"><a href="#" class="d-block megamenu-button-link dashbg-3"><i class="fa fa-clock-o"></i><strong>Demo 3</strong></a></div>
-                <div class="col-lg-2 col-md-4"><a href="#" class="d-block megamenu-button-link dashbg-4"><i class="fa fa-clock-o"></i><strong>Demo 4</strong></a></div>
-                <div class="col-lg-2 col-md-4"><a href="#" class="d-block megamenu-button-link bg-danger"><i class="fa fa-clock-o"></i><strong>Demo 5</strong></a></div>
-                <div class="col-lg-2 col-md-4"><a href="#" class="d-block megamenu-button-link bg-info"><i class="fa fa-clock-o"></i><strong>Demo 6</strong></a></div>
+                <div class="col-lg-2 col-md-4"><a href="{{url('/home')}}" class="d-block megamenu-button-link dashbg-1"><i class="fa fa-eye"></i><strong>CR 62,345 SAR</strong></a></div>
+                <div class="col-lg-2 col-md-4"><a href="{{url('/home')}}" class="d-block megamenu-button-link dashbg-2"><i class="fa fa-eye"></i><strong>CR 54,397 SAR</strong></a></div>
+                <div class="col-lg-2 col-md-4"><a href="{{url('/home')}}" class="d-block megamenu-button-link dashbg-4"><i class="fa fa-clock-o"></i><strong>Jv 193,456 SAR</strong></a></div>
+                <div class="col-lg-2 col-md-4"><a href="{{url('/home')}}" class="d-block megamenu-button-link bg-success"><i class="fa fa-eye"></i><strong>CR 56,923,650 PKR</strong></a></div>
+                <div class="col-lg-2 col-md-4"><a href="{{url('/home')}}" class="d-block megamenu-button-link bg-danger"><i class="fa fa-eye"></i><strong>CP 39,852,358 PKR</strong></a></div>
+                <div class="col-lg-2 col-md-4"><a href="{{url('/home')}}" class="d-block megamenu-button-link dashbg-3"><i class="fa fa-clock-o"></i><strong>Jv 63,987,654 PKR</strong></a></div>
               </div>
             </div>
           </div>
           <!-- Megamenu end     -->
-          <!-- Languages dropdown    -->
+          
+          {{-- <!-- Languages dropdown    -->
           <div class="list-inline-item dropdown"><a id="languages" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link language dropdown-toggle"><img src="img/flags/16/GB.png" alt="English"><span class="d-none d-sm-inline-block">English</span></a>
             <div aria-labelledby="languages" class="dropdown-menu"><a rel="nofollow" href="#" class="dropdown-item"> <img src="img/flags/16/DE.png" alt="English" class="mr-2"><span>German</span></a><a rel="nofollow" href="#" class="dropdown-item"> <img src="img/flags/16/FR.png" alt="English" class="mr-2"><span>French  </span></a></div>
-          </div>
+          </div> --}}
+
           <!-- Log out               -->
           <div class="list-inline-item logout">
 

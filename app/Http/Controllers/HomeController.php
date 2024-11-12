@@ -16,6 +16,10 @@ use App\Models\Order;
 
 use App\Models\Book;
 
+use App\Models\Accounts;
+
+use App\Models\Vouchers;
+
 class HomeController extends Controller
 {
 
@@ -35,15 +39,19 @@ class HomeController extends Controller
 
             if($usertype == 'admin')
             {
-                $total_user = User::where('usertype','=','user')->count();                
-                
-                $total_food = Food::all()->count();
+             
+                // $sum_accounts = Accounts::where('usertype','=','user')->count();
+                $sum_Accounts = Accounts::all()->count();
+                $sum_CR = Vouchers::where('voucherPrefix','=','CR')->count();
+                $sum_CP = Vouchers::where('voucherPrefix','=','CP')->count();
+                $sum_JV = Vouchers::where('voucherPrefix','=','JV')->count();
 
                 $total_order = Order::all()->count();
 
                 $total_delivered = Order::where('delivery_status','=','Delivered')->count();
 
-                return view('admin.index', compact('total_user', 'total_food', 'total_order', 'total_delivered'));
+                return view('admin.index', compact('sum_Accounts', 'sum_CR', 'sum_CP', 'sum_JV'));             
+                return view('admin.index');
             }
             else
             {

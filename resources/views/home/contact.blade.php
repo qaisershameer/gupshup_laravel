@@ -6,11 +6,11 @@
         </div>
         <div class="col-md-6 px-5 has-height-lg middle-items">
             <h3>FIND US</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit, laboriosam doloremque odio delectus, sunt magnam laborum impedit molestiae, magni quae ipsum, ullam eos! Alias suscipit impedit et, adipisci illo quam.</p>
+            <p>Postal Code +60000, Moza Wan Chattah Post Office Rangeel Pur Multan.</p>
             <div class="text-muted">
-                <p><span class="ti-location-pin pr-3"></span> 12345 Fake ST NoWhere, AB Country</p>
-                <p><span class="ti-support pr-3"></span> (123) 456-7890</p>
-                <p><span class="ti-email pr-3"></span>info@website.com</p>
+                <p><span class="ti-location-pin pr-3"></span> Multan Punjab Pakistan</p>
+                <p><span class="ti-support pr-3"></span> (+92) 334-601-3608</p>
+                <p><span class="ti-email pr-3"></span>mail@qrdpro.com</p>
             </div>
         </div>
     </div>

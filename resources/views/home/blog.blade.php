@@ -2,7 +2,7 @@
 
 <div id="blog" class="container-fluid bg-dark text-light py-5 text-center wow fadeIn">
     
-    <h2 class="section-title py-5">EVENTS AT THE FOOD HUT</h2>
+    <h2 class="section-title py-5">EVENTS AT THE QR Digital Services</h2>
 
     <div class="row justify-content-center">
 

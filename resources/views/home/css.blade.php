@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="Start your development with FoodHut landing page.">
 <meta name="author" content="Devcrud">
-<title>FoodHut | Free Bootstrap 4.3.x template</title>
+<title>Admin | Finance</title>
 
 <!-- font icons -->
 <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">

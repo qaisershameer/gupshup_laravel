@@ -6,7 +6,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="#home">Home</a>
+                @if (Route::has('login'))
+                    @auth
+                    <a class="nav-link" href="{{url('/home')}}">Home</a>
+                @else
+                @endauth
+                <a class="nav-link" href="{{url('/')}}">Home</a>
+                @endif                
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#about">About</a>
@@ -15,12 +21,12 @@
                 <a class="nav-link" href="#gallary">Gallary</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#book-table">Book-Table</a>
+                <a class="nav-link" href="#book-table">Book-Order</a>
             </li>
         </ul>
         <a class="navbar-brand m-auto" href="#">
             <img src="assets/imgs/logo.svg" class="brand-img" alt="">
-            <span class="brand-txt">Food Hut</span>
+            <span class="brand-txt">Admin Finance</span>
         </a>
         <ul class="navbar-nav">
             <li class="nav-item">
@@ -32,7 +38,8 @@
                     @auth
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('my_cart')}}">Cart</a>
+                        <!--<a class="nav-link" href="{{url('my_cart')}}">Cart</a>-->
+                        <a class="nav-link" href="{{url('/home')}}">Cart</a>
                     </li>
 
                     <form action="{{route('logout')}}" method="POST">
@@ -60,8 +67,10 @@
 <!-- header -->
 <header id="home" class="header">
     <div class="overlay text-white text-center">
-        <h1 class="display-2 font-weight-bold my-3">Food Hut</h1>
-        <h2 class="display-4 mb-5">Always fresh &amp; Delightful</h2>
-        <a class="btn btn-lg btn-primary" href="#gallary">View Our gallary</a>
+        <h1 class="display-2 font-weight-bold my-3">QR Digital Services</h1>
+        <h2 class="display-4 mb-5">provides you the best solutions</h2>
+        <a class="btn btn-lg btn-primary" href="#gallary">View Our Collections</a>
+        <br/>
+        <a class="btn btn-lg btn-success" href="{{route('login')}}">Click here to Login</a>
     </div>
 </header>
