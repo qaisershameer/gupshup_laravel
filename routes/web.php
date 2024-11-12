@@ -122,6 +122,7 @@ use App\Http\Controllers\AdminController;
 ///// Reports Controller Form Routes /////
 
     Route::get('/ac_ledger',[AdminController::class,'ac_ledger']);
+    Route::post('/ac_ledger',[AdminController::class,'ac_ledger']);
     Route::get('/cash_book',[AdminController::class,'cash_book']);
     Route::get('/trail_balance',[AdminController::class,'trail_balance']);
 

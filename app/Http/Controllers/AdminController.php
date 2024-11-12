@@ -1041,31 +1041,20 @@ class AdminController extends Controller
     
     //////////////////// Vouchers TABLE REPORTS ////////////////////
     
-    public function ac_ledger()
+    public function ac_ledger(Request $request)
     {
-        $accounts = Accounts::orderBy('acTitle')->get();
-        $data = Vouchers::orderBy('voucherDate')->get();
-
-        return view('admin.ac_ledger', compact('data','accounts')); 
-    }
-    
-    public function get_ledger(Request $request)
-    {
-        // Check if user is authenticated
+        
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-    
-        $uid = Auth::id(); // Get the currently authenticated user's ID
-    
-        $acId = $request->acId;
-        // $voucherPrefix = $request->voucherPrefix;
         $formatFrom = Carbon::parse($request->fromDate)->format('Y-m-d');
         $formatTo = Carbon::parse($request->toDate)->format('Y-m-d');
-        
+        $acId = $request->acId;
         $accounts = Accounts::orderBy('acTitle')->get();
-
-        $data = DB::table('vouchers')
+        $data = [];
+        if(!empty($acId)){
+            // $data =$this->get_ledger($request);
+            $data = DB::table('vouchers')
                        ->select('vouchers.voucherId',
                                 'vouchers.voucherDate',
                                 'vouchers.voucherPrefix',
@@ -1096,12 +1085,9 @@ class AdminController extends Controller
                             ->orderBy('vouchers.voucherDate', 'desc')
                             ->orderBy('vouchers.updated_at', 'desc')
                             ->get();
-
-                            // dd($voucherPrefix);
-                            // dd($data);
-
-        return view('admin.ac_ledger', compact('data','accounts')); 
-        
+        }
+       
+        return view('admin.ac_ledger', compact('data','accounts','acId')); 
     }
     
     public function cash_book(Request $request)
