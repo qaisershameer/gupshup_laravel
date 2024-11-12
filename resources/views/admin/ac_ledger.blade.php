@@ -62,7 +62,7 @@
                 <div class="div_deg">
 
                      <!--Form to add voucher -->
-                    <form action="{{url('ac_ledger')}}" method="get">
+                    <form action="{{url('ac_ledger')}}" method="post">
                         @csrf
 
                         <!--Hidden input for static "JV" voucherPrefix -->
@@ -70,10 +70,11 @@
 
                         <div>
                             <!--Select box for accounts-->
-                            <select name="acId" id="accountSelect" required>
+                            {{-- <select name="acId[]" class="select2" id="accountSelect" required multiple="multiple"> for multiple selction --}}
+                            <select name="acId" class="select2" id="accountSelect" required>
                                 <option value="">Select Account</option>  
                                 @foreach($accounts as $account)
-                                    <option value="{{ $account->acId }}">{{ $account->acTitle }}</option>
+                                    <option value="{{ $account->acId }}" {{$acId== $account->acId ?'selected':''}}>{{ $account->acTitle }}</option>
                                 @endforeach
                             </select>
                             
@@ -179,8 +180,9 @@
             </div>
         </div>
     </div>
-
+    
     @include('admin.js')
+    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 
     <script>
       // Set current date in the date input field
@@ -197,13 +199,5 @@
       
     </script>
 
-    <script>
-      $(document).ready(function() {
-          $('#accountSelect').select2({
-              placeholder: 'Search and Select Account',
-              allowClear: true
-          });
-      });
-    </script>
   </body>
 </html>
