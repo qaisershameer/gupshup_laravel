@@ -1,5 +1,9 @@
 <?php
 
+// Display all errors for debugging purposes
+ini_set('display_errors', 1); 
+error_reporting(E_ALL); 
+
 use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));

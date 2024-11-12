@@ -1041,31 +1041,25 @@ class AdminController extends Controller
     
     //////////////////// Vouchers TABLE REPORTS ////////////////////
     
-    public function ac_ledger()
-    {
-        $accounts = Accounts::orderBy('acTitle')->get();
-        $data = Vouchers::orderBy('voucherDate')->get();
-
-        return view('admin.ac_ledger', compact('data','accounts')); 
-    }
+    //////////////////// AC LEDGER REPORT ////////////////////
     
-    public function get_ledger(Request $request)
+    public function ac_ledger(Request $request)
     {
-        // Check if user is authenticated
+        
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-    
-        $uid = Auth::id(); // Get the currently authenticated user's ID
-    
-        $acId = $request->acId;
-        // $voucherPrefix = $request->voucherPrefix;
-        $formatFrom = Carbon::parse($request->fromDate)->format('Y-m-d');
-        $formatTo = Carbon::parse($request->toDate)->format('Y-m-d');
         
+        $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
+        $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
+        $acId = $request->acId;
         $accounts = Accounts::orderBy('acTitle')->get();
-
-        $data = DB::table('vouchers')
+        
+        // dd($datefrom, $datefrom);
+        
+        $data = [];
+        if(!empty($acId)){
+            $data = DB::table('vouchers')
                        ->select('vouchers.voucherId',
                                 'vouchers.voucherDate',
                                 'vouchers.voucherPrefix',
@@ -1092,34 +1086,29 @@ class AdminController extends Controller
                                 ->where('vouchers.drAcId', $acId)
                                 ->orWhere('vouchers.crAcId', $acId);
                             })                                            
-                            ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
+                            ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
                             ->orderBy('vouchers.voucherDate', 'desc')
                             ->orderBy('vouchers.updated_at', 'desc')
                             ->get();
-
-                            // dd($voucherPrefix);
-                            // dd($data);
-
-        return view('admin.ac_ledger', compact('data','accounts')); 
-        
+        }
+       
+        return view('admin.ac_ledger', compact('data','accounts','acId','datefrom','dateto')); 
     }
+    
+    //////////////////// CASH BOOK REPORT ////////////////////
     
     public function cash_book(Request $request)
     {
-        // Check if user is authenticated
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-    
-        $uid = Auth::id(); // Get the currently authenticated user's ID
-    
-        $accounts = Accounts::orderBy('acTitle')->get();
         
-        // Now you can access the request data
-        $formatFrom = Carbon::parse($request->fromDate)->format('Y-m-d');
-        $formatTo = Carbon::parse($request->toDate)->format('Y-m-d');
+        $datefrom = $request->has('dateFrom') ? Carbon::parse($request->dateFrom)->format('Y-m-d') : now()->format('Y-m-d');
+        $dateto = $request->has('dateTo') ? Carbon::parse($request->dateTo)->format('Y-m-d') : now()->format('Y-m-d');
     
-        $data = DB::table('vouchers')
+        $data = [];
+        if(!empty($datefrom))
+            {$data = DB::table('vouchers')
                    ->select('vouchers.voucherId',
                             'vouchers.voucherDate',
                             'vouchers.voucherPrefix',
@@ -1140,15 +1129,18 @@ class AdminController extends Controller
                     ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                     ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
                     ->whereIn('vouchers.voucherPrefix', ['CR', 'CP'])
-                    ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
+                    ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
                     ->orderBy('vouchers.voucherDate', 'desc')
                     ->orderBy('vouchers.updated_at', 'desc')
                     ->get();
-    
-        return view('admin.cash_book', compact('data', 'accounts')); 
+            }
+            
+        return view('admin.cash_book', compact('data','datefrom','dateto')); 
     }
 
-     public function trail_balance(Request $request)
+    //////////////////// TRAIL BALANCE REPORT ////////////////////
+    
+    public function trail_balance(Request $request)
     {
        // Check if user is authenticated
         if (!Auth::check()) {
@@ -1160,8 +1152,8 @@ class AdminController extends Controller
         $accounts = Accounts::orderBy('acTitle')->get();
         
         // Now you can access the request data
-        $formatFrom = Carbon::parse($request->fromDate)->format('Y-m-d');
-        $formatTo = Carbon::parse($request->toDate)->format('Y-m-d');
+        $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
+        $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
     
         $data = DB::table('vouchers')
                    ->select('vouchers.voucherId',
@@ -1184,12 +1176,12 @@ class AdminController extends Controller
                     ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                     ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
                     // ->whereIn('vouchers.voucherPrefix', ['CR', 'CP'])
-                    ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
+                    ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
                     ->orderBy('vouchers.voucherDate', 'desc')
-                    ->orderBy('vouchers.updated_at', 'desc')
+                    ->orderBy('vouchers.updated_at', 'desc','datefrom','dateto')
                     ->get();
     
-        return view('admin.trail_balance', compact('data', 'accounts')); 
+        return view('admin.trail_balance', compact('data', 'accounts','datefrom','dateto')); 
     }
     
 }
