@@ -9,7 +9,8 @@ use App\Http\Controllers\AdminController;
 ///// index Home Page Routes /////
 
     Route::get('/',[HomeController::class,'my_home']);
-    Route::get('/home',[HomeController::class,'index']);
+    // Route::get('/home',[HomeController::class,'index']);
+    Route::get('/home',[HomeController::class,'index'])->name('home');
 
 ///// Admin Controller Form Routes /////
 
@@ -123,8 +124,12 @@ use App\Http\Controllers\AdminController;
 
     Route::get('/ac_ledger',[AdminController::class,'ac_ledger']);
     Route::post('/ac_ledger',[AdminController::class,'ac_ledger']);
+    
     Route::get('/cash_book',[AdminController::class,'cash_book']);
+    Route::post('/cash_book',[AdminController::class,'cash_book']);
+    
     Route::get('/trail_balance',[AdminController::class,'trail_balance']);
+    Route::post('/trail_balance',[AdminController::class,'trail_balance']);
 
 
 ///// Theme Default Routes /////

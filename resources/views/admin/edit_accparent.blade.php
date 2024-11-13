@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    <base href="/public">
-    @include('admin.css')
-    
+@extends('admin.index')
+@section('content')
+
     <style type="text/css">
     
         input[type='text'], select
@@ -47,16 +44,7 @@
 
     </style>
     
-  </head>
-  <body>
-    
-        @include('admin.header')
-
-        @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+    <div class="container-fluid">
               
               <h1 style="color:white;">Update Parent Account</h1>
 
@@ -77,19 +65,12 @@
                           @endforeach
                       </select>
               
-                      <input class="btn btn-primary" type="submit" value="Update Parent Account">
+                      <input class="btn btn-success" type="submit" value="Update Parent Account">
                   </div>
               </form>
               
               </div>              
 
           </div>
-      </div>
-    </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
 
-  </body>
-  
-</html>
+@endsection

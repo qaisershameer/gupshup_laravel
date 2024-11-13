@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    <base href="/public">
-    @include('admin.css')
+@extends('admin.index')
+@section('content')
     
     <style type="text/css">
     
@@ -17,7 +14,7 @@
         
         input[type='text'], select
         {
-            width: 400px;
+            width: 420px;
             height: 45px;
         }
         
@@ -55,24 +52,16 @@
         }
 
     </style>
-    
-  </head>
-  <body>
-    
-        @include('admin.header')
 
-        @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+    <div class="container-fluid">
               
-              <h1 style="color:white;">Update Account</h1>
+        <h1 style="color:white;">Update Account</h1>
 
-              <div class="div_deg">
+        <div class="div_deg">
     
-                <form action="{{url('update_account', $data->acId)}}" method="post">
-                  @csrf
+            <form action="{{url('update_account', $data->acId)}}" method="post">
+                
+                @csrf
                   
                 <div>
                       <label for=""> Account Title </label>  
@@ -106,7 +95,7 @@
                 </div>
 
                 <div>
-                    <label for=""> Area </label>  
+                    <label for=""> Area </label>
                     <select name="areaId" required>
                         <option value="">Select Area</option>
                         @foreach($area as $area)
@@ -131,21 +120,15 @@
                     </select>
                 </div>    
               
-                <div>    
-                      <input class="btn btn-primary" type="submit" value="Update Account">
+                <div>
+                    <label for=""></label>
+                    <input class="btn btn-success" type="submit" value="Update Account">
                 </div>
 
               </form>
               
-              </div>              
+        </div>              
 
-          </div>
-      </div>
     </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
 
-  </body>
-  
-</html>
+@endsection

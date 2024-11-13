@@ -27,38 +27,30 @@ class HomeController extends Controller
     {
 
         $data = Food::all();
-
+        
+        if(Auth::user() && Auth()->user()->usertype == 'admin')
+        {
+            return redirect()->route('home');
+        }
         return view('home.index', compact('data'));
     }
-
+    
     public function index()
     {
-        if(Auth::id())
+        if(Auth()->user()->usertype == 'admin')
         {
-            $usertype = Auth()->user()->usertype;
-
-            if($usertype == 'admin')
-            {
-             
-                // $sum_accounts = Accounts::where('usertype','=','user')->count();
-                $sum_Accounts = Accounts::all()->count();
-                $sum_CR = Vouchers::where('voucherPrefix','=','CR')->count();
-                $sum_CP = Vouchers::where('voucherPrefix','=','CP')->count();
-                $sum_JV = Vouchers::where('voucherPrefix','=','JV')->count();
-
-                $total_order = Order::all()->count();
-
-                $total_delivered = Order::where('delivery_status','=','Delivered')->count();
-
-                return view('admin.index', compact('sum_Accounts', 'sum_CR', 'sum_CP', 'sum_JV'));             
-                return view('admin.index');
-            }
-            else
-            {
-                $data = Food::all();
-                return view('home.index', compact('data'));
-            }
-
+            $sum_Accounts = Accounts::all()->count();
+            $sum_CR = Vouchers::where('voucherPrefix','=','CR')->count();
+            $sum_CP = Vouchers::where('voucherPrefix','=','CP')->count();
+            $sum_JV = Vouchers::where('voucherPrefix','=','JV')->count();
+            $total_order = Order::all()->count();
+            $total_delivered = Order::where('delivery_status','=','Delivered')->count();
+            return view('admin.body', compact('sum_Accounts', 'sum_CR', 'sum_CP', 'sum_JV'));             
+        }
+        else
+        {
+            $data = Food::all();
+            return view('home.index', compact('data'));
         }
     }
 

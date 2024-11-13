@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    <base href="/public">
-    @include('admin.css')
-    
+@extends('admin.index')
+@section('content')
+
     <style type="text/css">
-    
+
         label
         {
           display: inline-block;
@@ -56,16 +53,7 @@
 
     </style>
     
-  </head>
-  <body>
-    
-        @include('admin.header')
-
-        @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+    <div class="container-fluid">
               
               <h1 style="color:white;">Update Receipt</h1>
 
@@ -88,7 +76,7 @@
                 <div>              
                     <label for=""> Account </label>
 
-                    <select name="acId" required>
+                    <select name="acId" class="select2" class="select2" required>
                         <option value="">Select Account</option>
                         @foreach($accounts as $accounts)
                             <option value="{{$accounts->acId}}" 
@@ -114,8 +102,9 @@
                     <input type="text" name="remarks" placeholder="Enter Remarks" value="{{ $data->remarks}}" required>
                 </div>    
               
-                <div>    
-                      <input class="btn btn-primary" type="submit" value="Update Receipt">
+                <div>
+                    <label for=""> </label>  
+                    <input class="btn btn-success" type="submit" value="Update Receipt">
                 </div>
 
               </form>
@@ -123,12 +112,5 @@
               </div>              
 
           </div>
-      </div>
-    </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
-
-  </body>
   
-</html>
+  @endsection

@@ -33,19 +33,19 @@ class TrialController extends BaseController
         $debits = Vouchers::select(
                 'drAcId AS acId', 
                 'accounts.acTitle',
-                'accType.accTypeTitle',
+                'acctype.accTypeTitle',
                 DB::raw('SUM(debit) AS debit'),
                 DB::raw('SUM(debitSR) AS debitSR'),
                 DB::raw('0 AS credit'),
                 DB::raw('0 AS creditSR')
             )
                 ->leftJoin('accounts', 'vouchers.drAcId', '=', 'accounts.acId')
-                ->leftJoin('accType AS accType', 'accounts.accTypeId', '=', 'accType.accTypeId')
+                ->leftJoin('acctype AS acctype', 'accounts.accTypeId', '=', 'acctype.accTypeId')
                 ->where('vouchers.uId', $uId)
                 // ->where('accounts.areaId', $areaId)
                 //  ->where('accounts.accTypeId', $accTypeId)
                 ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
-                ->groupBy('drAcId', 'accounts.acTitle', 'accType.accTypeTitle')
+                ->groupBy('drAcId', 'accounts.acTitle', 'acctype.accTypeTitle')
                 ->orderBy('accounts.acTitle', 'desc');
 
                 // Conditionally add the accTypeId filter if it's not 'ALL'
@@ -62,19 +62,19 @@ class TrialController extends BaseController
         $credits = Vouchers::select(
                 'crAcId AS acId', 
                 'accounts.acTitle',
-                'accType.accTypeTitle',
+                'acctype.accTypeTitle',
                 DB::raw('0 AS debit'),
                 DB::raw('0 AS debitSR'),
                 DB::raw('SUM(credit) AS credit'),
                 DB::raw('SUM(creditSR) AS creditSR')
             )
                 ->leftJoin('accounts', 'vouchers.crAcId', '=', 'accounts.acId')
-                ->leftJoin('accType', 'accounts.accTypeId', '=', 'accType.accTypeId')
+                ->leftJoin('acctype', 'accounts.accTypeId', '=', 'acctype.accTypeId')
                 ->where('vouchers.uId', $uId)
                 // ->where('accounts.areaId', $areaId)
                 // ->where('accounts.accTypeId', $accTypeId)
                 ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
-                ->groupBy('crAcId', 'accounts.acTitle', 'accType.accTypeTitle')
+                ->groupBy('crAcId', 'accounts.acTitle', 'acctype.accTypeTitle')
                 ->orderBy('accounts.acTitle', 'desc');
 
                 // Conditionally add the accTypeId filter if it's not 'ALL'

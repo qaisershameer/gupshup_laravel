@@ -11,13 +11,13 @@
 
         @include('admin.sidebar')
 
-      <div class="page-content">
+      <div class="page-content active">
         <div class="page-header">
-          <div class="container-fluid">
+          {{-- <div class="container-fluid"> --}}
 
-            @include('admin.body')
+            @yield('content')
 
-          </div>
+          {{-- </div> --}}
       </div>
     </div>
     

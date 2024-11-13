@@ -1,64 +1,84 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    
-    @include('admin.css')
-    
+@extends('admin.index')
+@section('content')
+
     <style type="text/css">
-    
-        input[type='text']
-        {
-            width: 420px;
-            height: 45px;
+        input[type='text'], input[type='number'], select {
+          width: 400px;
+          height: 45px;
+          padding: 10px;
+          font-size: 16px;
+          box-sizing: border-box;
         }
         
-        .div_deg
-        {
+        .div_deg {
             display: flex;
             justify-content: left;
             align-items: left;
         }
 
-        .table_deg
-        {
-            width: 1500px;
+        .table_deg {
+            width: 600px;
             text-align: center;
             margin: left;
-            margin-top: 50px;
+            margin-top: 10px;
             border: 2px solid yellowgreen;
         }
 
-        th
-        {
-          background-color: skyblue;
-          padding: 15px;
-          font-size: 20px;
+        .sar-th {
+            font-weight: bold; 
+            background-color:deepskyblue;
+            color: white;            
+        }
+        
+        .sar-total {
+            background-color: deepskyblue;
+            text-align: right;
+            font-weight: bold;
+            color: white;
+        }
+                
+        .pkr-th {
+            background-color: mediumSeaGreen;
+            color: white; 
+            font-weight: bold;
+        }
+        
+        .pkr-total {
+            background-color: mediumSeaGreen;
+            color: white; 
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .right {
+            text-align: right;
+        }
+        
+        .left {
+            text-align: left;
+        }
+        
+        th {
+          background-color: darkcyan;
+          border: 1px solid skyblue;
+          padding: 6px;
+          font-size: 16px;
           font-weight: bold;
           color: white;
         }
 
-        td
-        {
+        td {
           border: 1px solid skyblue;
-          padding: 10px;
-          font-size: 15px;
+          padding: 8px;
+          font-size: 14px;
           color: white;
         }
-
+        
     </style>
     
-  </head>
-  <body>
-    
-      @include('admin.header')
-
-      @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+    <div class="container-fluid">
               
-              <h1 style="color:white;">Account Type Information</h1>
+              <h3 style="color:white;">Account Type Information</h3>
 
               <div class="div_deg">
     
@@ -68,7 +88,7 @@
     
                     <div>
                         <input type="text" name="acctype_name" placeholder="Enter Account Type Title" required>                
-                        <input class="btn btn-primary" type="submit" value="Add Account Type">
+                        <input class="btn btn-success" type="submit" value="Save">
                     </div>
     
                 </form>
@@ -77,10 +97,10 @@
 
             <table class="table_deg">
                 <tr>
-                    <th> Sr. #  </th>
-                    <th> Acc Type Id  </th>
+                    <th> Sr  </th>
+                    <th> ID  </th>
                     <th> Acc Type Title </th>
-                    <th> Updated @ </th>
+                    <!--<th> Updated @ </th>-->
                     <th> Action </th>
                 </tr>
 
@@ -90,7 +110,7 @@
                     <td>{{ $key + 1 }}</td>
                     <td> {{$data->accTypeId}} </td>
                     <td> {{$data->accTypeTitle}} </td>
-                    <td> {{ \Carbon\Carbon::parse($data->updated_at)->format('d-M-y') }} </td>
+                    <!--<td> {{ \Carbon\Carbon::parse($data->updated_at)->format('d-M-y') }} </td>-->
                     
                     <td>
                         <a class="btn btn-success" href="{{url('edit_acctype', $data->accTypeId)}}"><i class="fas fa-pencil-alt"></i></a>
@@ -102,12 +122,5 @@
             </table>
 
           </div>
-      </div>
-    </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
 
-  </body>
-  
-</html>
+@endsection

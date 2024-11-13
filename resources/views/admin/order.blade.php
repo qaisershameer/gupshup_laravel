@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    
-    @include('admin.css')
+@extends('admin.index')
+@section('content')
 
     <style>
         table
@@ -29,16 +26,7 @@
         }
     </style>
 
-  </head>
-  <body>
-    
-        @include('admin.header')
-
-        @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+    <div class="container-fluid">
 
             <table>
                 <tr>
@@ -75,12 +63,5 @@
             </table>
 
           </div>
-      </div>
-    </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
 
-  </body>
-  
-</html>
+@endsection

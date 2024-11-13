@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    <base href="/public">
-    @include('admin.css')
+@extends('admin.index')
+@section('content')
     
     <style type="text/css">
     
@@ -46,42 +43,26 @@
         }
 
     </style>
+          
+    <div class="container-fluid">
+      
+      <h1 style="color:white;">Update Account Type</h1>
     
-  </head>
-  <body>
+      <div class="div_deg">
     
-        @include('admin.header')
-
-        @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
-              
-              <h1 style="color:white;">Update Account Type</h1>
-
-              <div class="div_deg">
+        <form action="{{url('update_acctype', $data->accTypeId)}}" method="post">
     
-                <form action="{{url('update_acctype', $data->accTypeId)}}" method="post">
+            @csrf
     
-                    @csrf
+            <div>
+              <input type="text" name="acctype_name" value="{{$data->accTypeTitle}}" placeholder="Enter Account Type Title" required>
+                <input class="btn btn-success" type="submit" value="Update Account Type">
+            </div>
     
-                    <div>
-                      <input type="text" name="acctype_name" value="{{$data->accTypeTitle}}" placeholder="Enter Account Type Title" required>
-                        <input class="btn btn-primary" type="submit" value="Update Account Type">
-                    </div>
+        </form>
     
-                </form>
+      </div>              
     
-              </div>              
-
-          </div>
-      </div>
     </div>
     
-    <!-- JavaScript files-->
-    @include('admin.js')
-
-  </body>
-  
-</html>
+@endsection

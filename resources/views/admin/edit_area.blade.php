@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    <base href="/public">
-    @include('admin.css')
-    
+@extends('admin.index')
+@section('content')
+
     <style type="text/css">
     
         input[type='text']
@@ -47,15 +44,6 @@
 
     </style>
     
-  </head>
-  <body>
-    
-        @include('admin.header')
-
-        @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
           <div class="container-fluid">
               
               <h1 style="color:white;">Update Area</h1>
@@ -68,7 +56,7 @@
     
                     <div>
                       <input type="text" name="area_name" value="{{$data->areaTitle}}" placeholder="Enter Area Title" required>
-                        <input class="btn btn-primary" type="submit" value="Update Area">
+                        <input class="btn btn-success" type="submit" value="Update Area">
                     </div>
     
                 </form>
@@ -76,12 +64,5 @@
               </div>              
 
           </div>
-      </div>
-    </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
-
-  </body>
-  
-</html>
+          
+@endsection

@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    <base href="/public">
-    @include('admin.css')
-    
+@extends('admin.index')
+@section('content')
+
     <style type="text/css">
     
         label
@@ -12,22 +9,36 @@
           width: 100px;
           font-size: 18px!important;
           color: white!important;
-          padding: 15px;
+          padding: 16px;
         }
-        
-        /* input[type='text'], input[type='number'], input[type='date'], select */
+
         input[type='text'], input[type='date'], select
         {
-            width: 450px;
-            height: 45px;
+          width: 400px;
+          height: 30px;
+          padding: 45 10px;
+          font-size: 16px;
+          box-sizing: border-box;
         }
-
-        input[type='number']
-        {
-            /* width: 500px; */
-            height: 45px;
+        
+        /* Text input */
+        /*input[type='text'] {*/
+        /*  width: 820px;*/
+        /*  height: 45px;*/
+        /*  padding: 0 10px;*/
+        /*  font-size: 16px;*/
+        /*  box-sizing: border-box;*/
+        /*}*/
+        
+        /* Number input */
+        input[type='number'] {
+          width: 160px;
+          height: 30px;
+          padding: 0 10px;
+          font-size: 16px;
+          box-sizing: border-box;
         }
-
+        
         .div_deg
         {
             display: flex;
@@ -63,16 +74,7 @@
 
     </style>
     
-  </head>
-  <body>
-    
-        @include('admin.header')
-
-        @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+    <div class="container-fluid">
               
               <h1 style="color:white;">Update Journal JV</h1>
 
@@ -94,7 +96,7 @@
 
                 <div>
                     <label for=""> Credit </label>
-                    <select name="crAcId" required>
+                    <select name="crAcId" class="select2" required>
                         <option value="">Select Credit Account</option>
                         @foreach($accounts as $account)
                             <option value="{{$account->acId}}" 
@@ -103,15 +105,15 @@
                             </option>
                         @endforeach
                     </select>
-                    <label for="">SAR CR</label>
-                    <input type="number" id="creditSR" name="creditSR" placeholder="SAR Credit" step="any" value="{{ $data->creditSR}}">
-                    <label for=""> PKR CR</label>
-                    <input type="number" id="credit" name="credit" placeholder="PKR Credit" step="any" value="{{ $data->credit}}">
+                    <label for="">SR CR</label>
+                    <input type="number" id="creditSR" name="creditSR" placeholder="SR Credit" step="any" value="{{ $data->creditSR}}">
+                    <label for=""> PK CR</label>
+                    <input type="number" id="credit" name="credit" placeholder="PK Credit" step="any" value="{{ $data->credit}}">
                 </div>
                 
                 <div>
                     <label for="">Debit</label>
-                    <select name="drAcId" required>
+                    <select name="drAcId" class="select2" required>
                         <option value="">Select Debit Account</option>
                         @foreach($accounts as $account)
                             <option value="{{$account->acId}}" 
@@ -121,20 +123,21 @@
                         @endforeach
                     </select>
 
-                    <label for="">SAR DR</label>
-                    <input type="number" id="debitSR" name="debitSR" placeholder="SAR Debit" step="any" value="{{ $data->debitSR}}">
-                    <label for="">PKR DR</label>
-                    <input type="number" id="debit" name="debit" placeholder="PKR Debit" step="any" value="{{ $data->debit}}">                    
+                    <label for="">SR DR</label>
+                    <input type="number" id="debitSR" name="debitSR" placeholder="SR Debit" step="any" value="{{ $data->debitSR}}">
+                    <label for="">PK DR</label>
+                    <input type="number" id="debit" name="debit" placeholder="PK Debit" step="any" value="{{ $data->debit}}">                    
                                         
                 </div>                
                         
                 <div>
-                    <label for=""> Currency </label>  
+                    <label for=""> Remarks </label>  
                     <input type="text" name="remarks" placeholder="Enter Remarks" value="{{ $data->remarks}}" required>
                 </div>    
               
-                <div>    
-                      <input class="btn btn-primary" type="submit" value="Update Payment">
+                <div>
+                    <label for=""> </label>  
+                    <input class="btn btn-success" type="submit" value="Update Payment">
                 </div>
 
               </form>
@@ -142,12 +145,5 @@
               </div>              
 
           </div>
-      </div>
-    </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
 
-  </body>
-  
-</html>
+@endsection

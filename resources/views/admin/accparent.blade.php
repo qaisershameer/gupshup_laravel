@@ -1,66 +1,84 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    
-    @include('admin.css')
+@extends('admin.index')
+@section('content')
     
     <style type="text/css">
-    
-        input[type='text'], select
-        {
-            width: 420px;
-            height: 45px;
-            /* color: white; */
+        input[type='text'], input[type='number'], select {
+          width: 350px;
+          height: 45px;
+          padding: 10px;
+          font-size: 16px;
+          box-sizing: border-box;
         }
         
-        .div_deg
-        {
+        .div_deg {
             display: flex;
             justify-content: left;
             align-items: left;
-            padding: 10px;
         }
 
-        .table_deg
-        {
-            width: 1500px;
+        .table_deg {
+            width: 775px;
             text-align: center;
             margin: left;
-            margin-top: 50px;
+            margin-top: 10px;
             border: 2px solid yellowgreen;
         }
 
-        th
-        {
-          background-color: skyblue;
-          padding: 15px;
-          font-size: 20px;
+        .sar-th {
+            font-weight: bold; 
+            background-color:deepskyblue;
+            color: white;            
+        }
+        
+        .sar-total {
+            background-color: deepskyblue;
+            text-align: right;
+            font-weight: bold;
+            color: white;
+        }
+                
+        .pkr-th {
+            background-color: mediumSeaGreen;
+            color: white; 
+            font-weight: bold;
+        }
+        
+        .pkr-total {
+            background-color: mediumSeaGreen;
+            color: white; 
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .right {
+            text-align: right;
+        }
+        
+        .left {
+            text-align: left;
+        }
+        
+        th {
+          background-color: darkcyan;
+          border: 1px solid skyblue;
+          padding: 6px;
+          font-size: 16px;
           font-weight: bold;
           color: white;
         }
 
-        td
-        {
+        td {
           border: 1px solid skyblue;
-          padding: 10px;
-          font-size: 15px;
+          padding: 8px;
+          font-size: 14px;
           color: white;
         }
-
+        
     </style>
     
-  </head>
-  <body>
-    
-      @include('admin.header')
-
-      @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+    <div class="container-fluid">
               
-              <h1 style="color:white;">Parent Accounts Information</h1>
+              <h3 style="color:white;">Parent Accounts Information</h3>
 
               <div class="div_deg">
     
@@ -76,9 +94,9 @@
                           @foreach($accType as $accType)
                             <option value="{{$accType->accTypeId}}"> {{$accType->accTypeTitle}} </option>
                           @endforeach
-                        </select>>    
+                        </select>
 
-                        <input class="btn btn-primary" type="submit" value="Add Parent Account">
+                        <input class="btn btn-success" type="submit" value="Save">
                     </div>
     
                 </form>
@@ -87,11 +105,11 @@
 
             <table class="table_deg">
                 <tr>
-                    <th> Sr. #  </th>
-                    <th> Parent Id </th>
+                    <th> Sr  </th>
+                    <th> ID </th>
                     <th> Parent Title </th>
                     <th> Account Type </th>                    
-                    <th> Updated @ </th>
+                    <!--<th> Updated @ </th>-->
                     <th> Action </th>
                 </tr>
 
@@ -102,7 +120,7 @@
                     <td> {{$data->parentId}} </td>
                     <td> {{$data->accParentTitle}} </td>
                     <td> {{$data->accTypeTitle}} </td>                    
-                    <td> {{ \Carbon\Carbon::parse($data->updated_at)->format('d-M-y') }} </td>
+                    <!--<td> {{ \Carbon\Carbon::parse($data->updated_at)->format('d-M-y') }} </td>-->
                     
                     <td>
                         <a class="btn btn-success" href="{{url('edit_accparent', $data->parentId)}}"><i class="fas fa-pencil-alt"></i></a>
@@ -114,12 +132,5 @@
             </table>
 
           </div>
-      </div>
-    </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
 
-  </body>
-  
-</html>
+  @endsection

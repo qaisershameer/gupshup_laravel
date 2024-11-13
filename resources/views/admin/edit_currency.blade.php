@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    <base href="/public">
-    @include('admin.css')
-    
+@extends('admin.index')
+@section('content')
+
     <style type="text/css">
     
         input[type='text']
@@ -46,17 +43,8 @@
         }
 
     </style>
-    
-  </head>
-  <body>
-    
-        @include('admin.header')
 
-        @include('admin.sidebar')
-
-      <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+    <div class="container-fluid">
               
               <h1 style="color:white;">Update Currency</h1>
 
@@ -68,7 +56,7 @@
     
                     <div>
                       <input type="text" name="currency_name" value="{{$data->currencyTitle}}" placeholder="Enter Currency Title" required>
-                        <input class="btn btn-primary" type="submit" value="Update currency">
+                        <input class="btn btn-success" type="submit" value="Update currency">
                     </div>
     
                 </form>
@@ -76,12 +64,5 @@
               </div>              
 
           </div>
-      </div>
-    </div>
-    
-    <!-- JavaScript files-->
-    @include('admin.js')
-
-  </body>
-  
-</html>
+          
+@endsection

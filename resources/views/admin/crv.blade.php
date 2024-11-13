@@ -1,124 +1,159 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    @include('admin.css')
+@extends('admin.index')
+@section('content')
+
     <style type="text/css">
-        input[type='text'], input[type='number'], input[type='date'], select 
-        {
-          width: 250px;
+    
+        /* Date text select input */
+        input[type='date'], [type='text'], select {
+          width: 205px;
           height: 45px;
           padding: 0 10px;
           font-size: 16px;
           box-sizing: border-box;
         }
 
+        /* Number input */
+        input[type='number'] {
+          width: 150px;
+          height: 45px;
+          padding: 0 10px;
+          font-size: 16px;
+          box-sizing: border-box;
+        }
+        
         .div_deg {
             display: flex;
             justify-content: left;
             align-items: left;
         }
 
+       .sar-th {
+            font-weight: bold; 
+            background-color:deepskyblue;
+            color: white;            
+        }
+        
+        .sar-total {
+            background-color: deepskyblue;
+            text-align: right;
+            font-weight: bold;
+            color: white;
+        }
+                
+        .pkr-th {
+            background-color: mediumSeaGreen;
+            color: white; 
+            font-weight: bold;
+        }
+        
+        .pkr-total {
+            background-color: mediumSeaGreen;
+            color: white; 
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .right {
+            text-align: right;
+        }
+        
+        .left {
+            text-align: left;
+        }
+ 
         .table_deg {
-            width: 1500px;
+            width: 1000px;
             text-align: center;
             margin: left;
-            margin-top: 50px;
+            margin-top: 10px;
             border: 2px solid yellowgreen;
         }
 
         th {
-          background-color: skyblue;
-          padding: 15px;
-          font-size: 20px;
+          background-color: darkcyan;
+          border: 1px solid skyblue;
+          padding: 6px;
+          font-size: 16px;
           font-weight: bold;
           color: white;
         }
 
         td {
           border: 1px solid skyblue;
-          padding: 10px;
-          font-size: 15px;
+          padding: 8px;
+          font-size: 14px;
           color: white;
         }
     </style>
-  </head>
-  <body>
-    @include('admin.header')
-    @include('admin.sidebar')
+    
+    <div class="container-fluid">
+        <h3 style="color:white;">Receipt Vouchers</h3>
 
-    <div class="page-content">
-        <div class="page-header">
-            <div class="container-fluid">
-                <h1 style="color:white;">Receipt Vouchers</h1>
+        <div class="div_deg">
+            <!-- Form to add voucher -->
+            <form action="{{url('add_crv','CR')}}" method="post">
+                @csrf
 
-                <div class="div_deg">
-                    <!-- Form to add voucher -->
-                    <form action="{{url('add_crv','CR')}}" method="post">
-                        @csrf
+                <div>
+                    
+                    <!-- Hidden input for static "CR" voucherPrefix -->
+                    <input type="hidden" id="voucherPrefix" name="voucherPrefix" value="CR">
 
-                        <div>
-                            
-                            <!-- Hidden input for static "CR" voucherPrefix -->
-                            <input type="hidden" id="voucherPrefix" name="voucherPrefix" value="CR">
+                    <!-- Input for Voucher Date -->
+                    <input type="date" id="dateInput" name="voucherDate" placeholder="10-Nov-2024" required>
 
-                            <!-- Input for Voucher Date -->
-                            <input type="date" id="dateInput" name="voucherDate" placeholder="10-Nov-2024" required>
+                    <!-- Select box for accounts -->
+                    <select name="acId" id="accountSelect" class="select2" required>
+                        <option value="">Select Account</option>  
+                        @foreach($accounts as $account)
+                            <option value="{{ $account->acId }}">{{ $account->acTitle }}</option>
+                        @endforeach
+                    </select>
 
-                            <!-- Select box for accounts -->
-                            <select name="acId" id="accountSelect" required>
-                                <option value="">Select Account</option>  
-                                @foreach($accounts as $account)
-                                    <option value="{{ $account->acId }}">{{ $account->acTitle }}</option>
-                                @endforeach
-                            </select>
+                    <!-- Credit fields -->
+                    <input type="number" id="creditSR" name="creditSR" placeholder="SAR Credit" step="any" required>
+                    <input type="number" id="credit" name="credit" placeholder="PKR Credit" step="any" required>
+                    
+                    <!-- Remarks field -->
+                    <input type="text" name="remarks" placeholder="Enter Remarks" value="Cash Received." required>
 
-                            <!-- Credit fields -->
-                            <input type="number" id="creditSR" name="creditSR" placeholder="SAR Credit" step="any" required>
-                            <input type="number" id="credit" name="credit" placeholder="PKR Credit" step="any" required>
-                            
-                            <!-- Remarks field -->
-                            <input type="text" name="remarks" placeholder="Enter Remarks" value="Cash Received." required>
+                    <!-- Submit button -->
+                    <input class="btn btn-success" type="submit" value="Save">
 
-                            <!-- Submit button -->
-                            <input class="btn btn-primary" type="submit" value="Add Receipt">
-                        </div>
-                    </form>
                 </div>
-
-                <!-- Table for displaying voucher data -->
-                <table class="table_deg">
-                    <tr>
-                        <th> Sr. # </th>
-                        <th> Date </th>
-                        <th> Type </th>
-                        <th> Account </th>
-                        <th> SAR </th>
-                        <th> PKR </th>
-                        <th> Remarks </th>
-                        <th> Action </th>
-                    </tr>
-
-                    @foreach ($data as $index => $vouchers)
-                    <tr>
-                        <td> {{ (int) $index + 1 }} </td>
-                        <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d-M-y') }} </td>
-                        <td> {{$vouchers->voucherPrefix}} </td>
-                        <td> {{$vouchers->crAcTitle}} </td>
-                        <td>{!! $vouchers->creditSR == 0 ? '&nbsp;' : number_format($vouchers->creditSR, 0, '.', ',') !!}</td>
-                        <td>{!! $vouchers->credit == 0 ? '&nbsp;' : number_format($vouchers->credit, 2, '.', ',') !!}</td>
-                        <td> {{$vouchers->remarks}} </td>
-                        <td>
-                            <a class="btn btn-success" href="{{url('edit_crv', $vouchers->voucherId)}}"><i class="fas fa-pencil-alt"></i></a>
-                            <a class="btn btn-danger" onclick="confirmation(event)" href="{{url('delete_voucher', $vouchers->voucherId)}}"><i class="fas fa-trash-alt"></i></a>
-                        </td>                        
-                    </tr>
-                    @endforeach
-                </table>
-            </div>
+            </form>
         </div>
-    </div>
 
-    @include('admin.js')
+        <!-- Table for displaying voucher data -->
+        <table class="table_deg">
+            <tr>
+                <th> Sr. </th>
+                <th> Date </th>
+                <th> VC </th>
+                <th> Account </th>
+                <th> SAR </th>
+                <th> PKR </th>
+                <th> Remarks </th>
+                <th> Action </th>
+            </tr>
+
+            @foreach ($data as $index => $vouchers)
+            <tr>
+                <td> {{ (int) $index + 1 }} </td>
+                <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d-M-y') }} </td>
+                <td> {{$vouchers->voucherPrefix}} </td>
+                <td> {{$vouchers->crAcTitle}} </td>
+                <td class="right">{!! $vouchers->creditSR == 0 ? '&nbsp;' : number_format($vouchers->creditSR, 0, '.', ',') !!}</td>
+                <td class="right">{!! $vouchers->credit == 0 ? '&nbsp;' : number_format($vouchers->credit, 2, '.', ',') !!}</td>
+                <td> {{$vouchers->remarks}} </td>
+                <td>
+                    <a class="btn btn-success" href="{{url('edit_crv', $vouchers->voucherId)}}"><i class="fas fa-pencil-alt"></i></a>
+                    <a class="btn btn-danger" onclick="confirmation(event)" href="{{url('delete_voucher', $vouchers->voucherId)}}"><i class="fas fa-trash-alt"></i></a>
+                </td>                        
+            </tr>
+            @endforeach
+        </table>
+    </div>
 
     <script>
       // Set current date in the date input field
@@ -130,13 +165,4 @@
       document.getElementById('dateInput').value = currentDate;
     </script>
 
-    <script>
-      $(document).ready(function() {
-          $('#accountSelect').select2({
-              placeholder: 'Search and Select Account',
-              allowClear: true
-          });
-      });
-    </script>
-  </body>
-</html>
+  @endsection

@@ -706,7 +706,6 @@ class AdminController extends Controller
                                 'acctype_dr.accTypeTitle as drAcTypeTitle',
                                 'accounts_cr.acTitle as crAcTitle',
                                 'acctype_cr.accTypeTitle as crAcTypeTitle')
-                                // ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
                                 ->leftJoin('accounts as accounts_dr', 'vouchers.drAcId', '=', 'accounts_dr.acId')
                                 ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
                                 ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
@@ -1041,19 +1040,24 @@ class AdminController extends Controller
     
     //////////////////// Vouchers TABLE REPORTS ////////////////////
     
+    //////////////////// AC LEDGER REPORT ////////////////////
+    
     public function ac_ledger(Request $request)
     {
         
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        $formatFrom = Carbon::parse($request->fromDate)->format('Y-m-d');
-        $formatTo = Carbon::parse($request->toDate)->format('Y-m-d');
+        
+        $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
+        $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
         $acId = $request->acId;
         $accounts = Accounts::orderBy('acTitle')->get();
+        
+        // dd($datefrom, $datefrom);
+        
         $data = [];
         if(!empty($acId)){
-            // $data =$this->get_ledger($request);
             $data = DB::table('vouchers')
                        ->select('vouchers.voucherId',
                                 'vouchers.voucherDate',
@@ -1081,31 +1085,29 @@ class AdminController extends Controller
                                 ->where('vouchers.drAcId', $acId)
                                 ->orWhere('vouchers.crAcId', $acId);
                             })                                            
-                            ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
+                            ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
                             ->orderBy('vouchers.voucherDate', 'desc')
                             ->orderBy('vouchers.updated_at', 'desc')
                             ->get();
         }
        
-        return view('admin.ac_ledger', compact('data','accounts','acId')); 
+        return view('admin.ac_ledger', compact('data','accounts','acId','datefrom','dateto')); 
     }
+    
+    //////////////////// CASH BOOK REPORT ////////////////////
     
     public function cash_book(Request $request)
     {
-        // Check if user is authenticated
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-    
-        $uid = Auth::id(); // Get the currently authenticated user's ID
-    
-        $accounts = Accounts::orderBy('acTitle')->get();
         
-        // Now you can access the request data
-        $formatFrom = Carbon::parse($request->fromDate)->format('Y-m-d');
-        $formatTo = Carbon::parse($request->toDate)->format('Y-m-d');
+        $datefrom = $request->has('dateFrom') ? Carbon::parse($request->dateFrom)->format('Y-m-d') : now()->format('Y-m-d');
+        $dateto = $request->has('dateTo') ? Carbon::parse($request->dateTo)->format('Y-m-d') : now()->format('Y-m-d');
     
-        $data = DB::table('vouchers')
+        $data = [];
+        if(!empty($datefrom))
+            {$data = DB::table('vouchers')
                    ->select('vouchers.voucherId',
                             'vouchers.voucherDate',
                             'vouchers.voucherPrefix',
@@ -1126,56 +1128,147 @@ class AdminController extends Controller
                     ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                     ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
                     ->whereIn('vouchers.voucherPrefix', ['CR', 'CP'])
-                    ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
+                    ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
                     ->orderBy('vouchers.voucherDate', 'desc')
                     ->orderBy('vouchers.updated_at', 'desc')
                     ->get();
-    
-        return view('admin.cash_book', compact('data', 'accounts')); 
+            }
+            
+        return view('admin.cash_book', compact('data','datefrom','dateto')); 
     }
 
-     public function trail_balance(Request $request)
-    {
-       // Check if user is authenticated
-        if (!Auth::check()) {
+    //////////////////// TRAIL BALANCE REPORT ////////////////////
+    
+    public function trail_balance(Request $request)
+    {     if (!Auth::check()) {
             return redirect()->route('login');
         }
-    
-        $uid = Auth::id(); // Get the currently authenticated user's ID
-    
+        
+        $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
+        $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
+        $acId = $request->acId;
         $accounts = Accounts::orderBy('acTitle')->get();
         
-        // Now you can access the request data
-        $formatFrom = Carbon::parse($request->fromDate)->format('Y-m-d');
-        $formatTo = Carbon::parse($request->toDate)->format('Y-m-d');
+        // dd($datefrom, $datefrom);
+        
+        $data = [];
+        if(!empty($acId)){
+            $data = DB::table('vouchers')
+                       ->select('vouchers.drAcId',
+                                'vouchers.crAcId',
+                                SUM(vouchers.debit) as debit,
+                                SUM(vouchers.credit) as crdit,
+                                SUM(vouchers.debitSR) as debitSR,
+                                SUM(vouchers.creditSR)as creditSR,
+                                'accounts_dr.acTitle as drAcTitle',
+                                'acctype_dr.accTypeTitle as drAcTypeTitle',
+                                'accounts_cr.acTitle as crAcTitle',
+                                'acctype_cr.accTypeTitle as crAcTypeTitle')
+                                // ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
+                                ->leftJoin('accounts as accounts_dr', 'vouchers.drAcId', '=', 'accounts_dr.acId')
+                                ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
+                                ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
+                                ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
+                            // ->where('vouchers.uId', $uId)
+                            ->where(function($query) use ($acId)
+                            {$query
+                                ->where('vouchers.drAcId', $acId)
+                                ->orWhere('vouchers.crAcId', $acId);
+                            })                                            
+                            ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
+                            ->orderBy('vouchers.voucherDate', 'desc')
+                            ->orderBy('vouchers.updated_at', 'desc')
+                            ->get();
+        }
+       
+        return view('admin.ac_ledger', compact('data','accounts','acId','datefrom','dateto'));  }
     
-        $data = DB::table('vouchers')
-                   ->select('vouchers.voucherId',
-                            'vouchers.voucherDate',
-                            'vouchers.voucherPrefix',
-                            'vouchers.remarks',
-                            'vouchers.drAcId',
-                            'vouchers.crAcId',
-                            'vouchers.debit',
-                            'vouchers.credit',
-                            'vouchers.debitSR',
-                            'vouchers.creditSR',
-                            'vouchers.uId',
-                            'accounts_dr.acTitle as drAcTitle',
-                            'acctype_dr.accTypeTitle as drAcTypeTitle',
-                            'accounts_cr.acTitle as crAcTitle',
-                            'acctype_cr.accTypeTitle as crAcTypeTitle')
-                    ->leftJoin('accounts as accounts_dr', 'vouchers.drAcId', '=', 'accounts_dr.acId')
-                    ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
-                    ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
-                    ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
-                    // ->whereIn('vouchers.voucherPrefix', ['CR', 'CP'])
-                    ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
-                    ->orderBy('vouchers.voucherDate', 'desc')
-                    ->orderBy('vouchers.updated_at', 'desc')
-                    ->get();
+    // public function trail_balance(Request $request)
+    // {
+    //     if (!Auth::check()) {
+    //         return redirect()->route('login');
+    //     }
     
-        return view('admin.trail_balance', compact('data', 'accounts')); 
-    }
+    //     $uid = Auth::id(); // Get the currently authenticated user's ID
+    //     $accounts = Accounts::orderBy('acTitle')->get();
     
+    //     $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
+    //     $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
+    
+    //     // Debit query with COALESCE to replace null acId
+    //     $debits = Vouchers::select(
+    //                 DB::raw('COALESCE(drAcId, 0) AS acId'), 
+    //                 'accounts.acTitle',
+    //                 'acctype.accTypeTitle',
+    //                 DB::raw('SUM(debit) AS debit'),
+    //                 DB::raw('SUM(debitSR) AS debitSR'),
+    //                 DB::raw('0 AS credit'),
+    //                 DB::raw('0 AS creditSR')
+    //               )
+    //             ->leftJoin('accounts', 'vouchers.drAcId', '=', 'accounts.acId')
+    //             ->leftJoin('acctype AS acctype', 'accounts.accTypeId', '=', 'acctype.accTypeId')
+    //             ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
+    //             ->groupBy('drAcId', 'accounts.acTitle', 'acctype.accTypeTitle')
+    //             ->orderBy('accounts.acTitle', 'desc');
+        
+    //     // Credit query with COALESCE to replace null acId
+    //     $credits = Vouchers::select(
+    //                 DB::raw('COALESCE(crAcId, 0) AS acId'),
+    //                 'accounts.acTitle',
+    //                 'acctype.accTypeTitle',
+    //                 DB::raw('0 AS debit'),
+    //                 DB::raw('0 AS debitSR'),
+    //                 DB::raw('SUM(credit) AS credit'),
+    //                 DB::raw('SUM(creditSR) AS creditSR')
+    //             )
+    //             ->leftJoin('accounts', 'vouchers.crAcId', '=', 'accounts.acId')
+    //             ->leftJoin('acctype', 'accounts.accTypeId', '=', 'acctype.accTypeId')
+    //             ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
+    //             ->groupBy('crAcId', 'accounts.acTitle', 'acctype.accTypeTitle')
+    //             ->orderBy('accounts.acTitle', 'desc');
+    
+    //     // Get results for debits and credits
+    //     $debitResults = $debits->get();
+    //     $creditResults = $credits->get();
+    
+    //     // Filter out null acId values before merging
+    //     $debitResults = $debitResults->filter(function ($item) {
+    //         return !is_null($item->acId);
+    //     });
+    
+    //     $creditResults = $creditResults->filter(function ($item) {
+    //         return !is_null($item->acId);
+    //     });
+    
+    //     // Merge the results
+    //     $mergedResults = $debitResults->merge($creditResults);
+    
+    //     // Group by acId
+    //     $groupedResults = $mergedResults->groupBy('acId');
+    
+    //     // Sort the results by acTitle
+    //     $sortedResults = $groupedResults->sortBy(function ($item) {
+    //         return $item->first()->acTitle;
+    //     });
+    
+    //     // Prepare final data
+    //     $data = $sortedResults->map(function ($items, $key) {
+    //         return (object) [
+    //             'acId' => $key,
+    //             'acTitle' => $items->first()->acTitle,
+    //             'accTypeTitle' => $items->first()->accTypeTitle,
+    //             'debit' => $items->sum('debit'),
+    //             'credit' => $items->sum('credit'),
+    //             'debitSR' => $items->sum('debitSR'),
+    //             'creditSR' => $items->sum('creditSR'),
+    //         ];
+    //     });
+        
+    //     // dd($datefrom, $dateto, $debits->toSql(), $credits->toSql(), $data);
+    //     // dd($debits, $credits);
+    //     // dd( $data);
+    
+    //     return view('admin.trail_balance', compact('data', 'accounts', 'datefrom', 'dateto'));
+    // }
+
 }

@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head> 
-    @include('admin.css')
+@extends('admin.index')
+@section('content')
+
     <style type="text/css">
-        input[type='text'], input[type='number'], select
-        {
+        input[type='text'], input[type='number'], select {
           width: 400px;
           height: 45px;
           padding: 10px;
           font-size: 16px;
           box-sizing: border-box;
         }
+        
         input[type='date']
         {
           width: 200px;
@@ -18,7 +17,7 @@
           padding: 10px;
           font-size: 16px;
           box-sizing: border-box;
-        }        
+        }
 
         .div_deg {
             display: flex;
@@ -27,17 +26,52 @@
         }
 
         .table_deg {
-            width: 1500px;
+            width: 1000px;
             text-align: center;
             margin: left;
             margin-top: 10px;
             border: 2px solid yellowgreen;
         }
 
+        .sar-th {
+            font-weight: bold; 
+            background-color:deepskyblue;
+            color: white;            
+        }
+        
+        .sar-total {
+            background-color: deepskyblue;
+            text-align: right;
+            font-weight: bold;
+            color: white;
+        }
+                
+        .pkr-th {
+            background-color: mediumSeaGreen;
+            color: white; 
+            font-weight: bold;
+        }
+        
+        .pkr-total {
+            background-color: mediumSeaGreen;
+            color: white; 
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .right {
+            text-align: right;
+        }
+        
+        .left {
+            text-align: left;
+        }
+        
         th {
-          background-color: skyblue;
+          background-color: darkcyan;
+          border: 1px solid skyblue;
           padding: 6px;
-          font-size: 18px;
+          font-size: 16px;
           font-weight: bold;
           color: white;
         }
@@ -48,116 +82,114 @@
           font-size: 14px;
           color: white;
         }
+        
     </style>
-  </head>
-  <body>
-    @include('admin.header')
-    @include('admin.sidebar')
+            
+    <div class="container-fluid">
+        
+        <h3 style="color:white;">Trail Balance Report</h3>
 
-    <div class="page-content">
-        <div class="page-header">
-            <div class="container-fluid">
-                <h3 style="color:white;">Trail Balance Report</h3>
+        <div class="div_deg">
 
-                <div class="div_deg">
+             <!--Form to add voucher -->
+            <form action="{{url('trail_balance')}}" method="get">
+                @csrf
 
-                     <!--Form to add voucher -->
-                    <form action="{{url('trail_balance')}}" method="get">
-                        @csrf
+                <!--Hidden input for static "JV" voucherPrefix -->
+                <input type="hidden" id="voucherPrefix" name="voucherPrefix" value="JV">
 
-                        <!--Hidden input for static "JV" voucherPrefix -->
-                        <input type="hidden" id="voucherPrefix" name="voucherPrefix" value="JV">
-
-                        <div>
-                            <!--Input for Date From To -->
-                            <input type="date" id="dateInputFrom" name="dateFrom" placeholder="01-Jan-2024" required>
-                            <input type="date" id="dateInput" name="dateTo" placeholder="11-Nov-2024" required>
-                            
-                            <!--Sumbit Button -->
-                            <button class="btn btn-success" type="submit"><i class="fas fa-search"></i> View Cash Book</button>
-                            
-                        </div>
-
-                    </form>
+                <div>
+                    <!--Input for Date From To -->
+                    <input type="date" id="dateInputFrom" name="dateFrom" value="{{ old('dateFrom', $datefrom) }}" required>
+                    <input type="date" id="dateInputTo" name="dateTo" value="{{ old('dateTo', $dateto) }}" required>
+                    
+                    <!--Sumbit Button -->
+                    <button class="btn btn-success" type="submit"><i class="fas fa-search"></i> View Trial Balance</button>
+                    
                 </div>
+
+            </form>
+        </div>
               
-              <div>    
+        <div>    
                 
                 <!-- Table for displaying voucher data -->
                 <table class="table_deg">
-                    <tr>
-                        <th> Sr. # </th>
-                        <th> Account Title </th>
-
-                        <th> SAR DR </th>
-                        <th> SAR CR </th>
-                        
-                        <th> PKR DR</th>
-                        <th> PKR CR</th>
-                    </tr>
-    
-                    <?php 
-                        $sum_debit = 0;
-                        $sum_credit = 0;
-                        
-                        $sum_debitSR = 0;
-                        $sum_creditSR = 0;
-                        
-                        $sum_SAR = 0;
-                        $sum_PKR = 0;
-                    ?>
+                    <thead>
+                        <tr>
+                            <th> Sr. # </th>
+                            <th> Account Title </th>
+                            <th colspan="2"> SAR </th>
+                            <th colspan="2"> PKR</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="sar-th">Dr</td>
+                            <td class="sar-th">Cr</td>
+                            <td class="pkr-th">Dr</td>
+                            <td class="pkr-th">Cr</td>
+                        </tr>
+                    </thead>
                     
-                    @foreach ($data as $index => $vouchers)
-                    <tr>
-                        <td> {{ (int) $index + 1 }} </td>
-                        <td> {{ $vouchers->drAcId != 0 ? $vouchers->drAcTitle : $vouchers->crAcTitle }} </td>
-
-                        <td>{!! $vouchers->debitSR == 0 ? '&nbsp;' : number_format($vouchers->debitSR, 0, '.', ',') !!}</td>
-                        <td>{!! $vouchers->creditSR == 0 ? '&nbsp;' : number_format($vouchers->creditSR, 0, '.', ',') !!}</td>
+                    <tbody>
+                        <?php 
+                            $sum_debit = 0;
+                            $sum_credit = 0;
+                            
+                            $sum_debitSR = 0;
+                            $sum_creditSR = 0;
+                            
+                            $sum_SAR = 0;
+                            $sum_PKR = 0;
+                        ?>
                         
-                        <td>{!! $vouchers->debit == 0 ? '&nbsp;' : number_format($vouchers->debit, 2, '.', ',') !!}</td>
-                        <td>{!! $vouchers->credit == 0 ? '&nbsp;' : number_format($vouchers->credit, 2, '.', ',') !!}</td>
-                    </tr>
+                        @foreach ($data as $index => $trail)
+                        <tr>
+                            <td> {{ (int) $index + 1 }} </td>
+                           <td class="left"> {{ $trail->acTitle }} </td>
     
-                    <?php
-                        $sum_debitSR += $vouchers->debitSR;
-                        $sum_creditSR += $vouchers->creditSR;
+                            <td class="right">{!! $trail->debitSR == 0 ? '&nbsp;' : number_format($trail->debitSR, 0, '.', ',') !!}</td>
+                            <td class="right">{!! $trail->creditSR == 0 ? '&nbsp;' : number_format($trail->creditSR, 0, '.', ',') !!}</td>
+                            
+                            <td class="right">{!! $trail->debit == 0 ? '&nbsp;' : number_format($trail->debit, 2, '.', ',') !!}</td>
+                            <td class="right">{!! $trail->credit == 0 ? '&nbsp;' : number_format($trail->credit, 2, '.', ',') !!}</td>
+                        </tr>
+        
+                        <?php
+                            $sum_debitSR += $trail->debitSR;
+                            $sum_creditSR += $trail->creditSR;
+                            
+                            $sum_debit += $trail->debit;
+                            $sum_credit += $trail->credit;
+                            
+                            $sum_SAR += ($trail->debitSR - $trail->creditSR);
+                            $sum_PKR += ($trail->debit - $trail->credit);
+                        ?>
                         
-                        $sum_debit += $vouchers->debit;
-                        $sum_credit += $vouchers->credit;
+                        @endforeach
                         
-                        $sum_SAR += ($vouchers->debitSR - $vouchers->creditSR);
-                        $sum_PKR += ($vouchers->debit - $vouchers->credit);
-                    ?>
-                    
-                    @endforeach
-                    
-                    <!--<tr style="background-color: yellow;">-->
-                    <tr>
-                        <td style="font-weight: bold; background-color: yellow; color: red;"></td>
-                        <td style="font-weight: bold; background-color: yellow; color: red;">Totals</td>
-                        <td style="font-weight: bold; background-color: yellow; color: red;">{{ number_format($sum_debitSR, 0, '.', ',') }}</td>
-                        <td style="font-weight: bold; background-color: yellow; color: red;">{{ number_format($sum_creditSR, 0, '.', ',') }}</td>
-                        <td style="font-weight: bold; background-color: yellow; color: red;">{{ number_format($sum_debit, 2, '.', ',') }}</td>
-                        <td style="font-weight: bold; background-color: yellow; color: red;">{{ number_format($sum_credit, 2, '.', ',') }}</td>
+                        <tr>
+                            <td></td>
+                            <th class="right" >Totals : </th>
+                            <td class="sar-total">{{ number_format($sum_debitSR, 0, '.', ',') }}</td>
+                            <td class="sar-total">{{ number_format($sum_creditSR, 0, '.', ',') }}</td>
+                            <td class="pkr-total">{{ number_format($sum_debit, 2, '.', ',') }}</td>
+                            <td class="pkr-total">{{ number_format($sum_credit, 2, '.', ',') }}</td>
+                        </tr>
+        
+                        <tr>
+                            <td></td>
+                            <th class="right">B/F Balance : </th>
+                            <th colspan="2" class="right">{{ number_format($sum_SAR, 0, '.', ',') }}</th>
+                            <th colspan="2" class="right">{{ number_format($sum_PKR, 2, '.', ',') }}</th>
+                        </tr>
                         
-                    </tr>
-    
-                    <tr>
-                        <th></th>
-                        <th>B/F Balance</th>
-                        <th></th>
-                        <th>{{ number_format($sum_SAR, 0, '.', ',') }}</th>
-                        <th></th>
-                        <th>{{ number_format($sum_PKR, 2, '.', ',') }}</th>
-                    </tr>
+                    </tbody>
                 </table>
                 
             </div>
-        </div>
+            
     </div>
-
-    @include('admin.js')
 
     <script>
       // Set current date in the date input field
@@ -170,17 +202,8 @@
       const startDate = `${year}-01-01`;
       
       document.getElementById('dateInputFrom').value = startDate;
-      document.getElementById('dateInput').value = currentDate;
+      document.getElementById('dateInputTo').value = currentDate;
       
     </script>
 
-    <script>
-      $(document).ready(function() {
-          $('#accountSelect').select2({
-              placeholder: 'Search and Select Account',
-              allowClear: true
-          });
-      });
-    </script>
-  </body>
-</html>
+@endsection
