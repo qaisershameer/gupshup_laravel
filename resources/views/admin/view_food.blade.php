@@ -4,19 +4,24 @@
     <style>
         table
         {
-          border: 1px solid skyblue;
-          /* margin: auto; */
-          width: 800px;
+            width: 1000px;
+            text-align: left;
+            margin: left;
+            margin-top: 10px;
+            border: 2px solid yellowgreen;
         }
         th
         {
+          border: 2px solid yellowgreen;
           background: skyblue;
+          text-align: center;
           color: white;
           padding: 10px;
           margin: 10px;
         }
         td
-        {          
+        {
+          border: 1px solid yellowgreen;
           color: white;
           padding: 10px;
           margin: 10px;
@@ -50,7 +55,7 @@
                 <tr>
                   <td> {{$data->title}} </td>
                   <td> {{$data->detail}} </td>
-                  <td> {{$data->price}} </td>
+                  <td> {{ number_format($data->price, 0, '.', ',') }} </td>
                   <td> <img width="100" height="100" src="food_img/{{$data->image}}" alt=""> </td>
 
                   <td> <a class="btn btn-success"

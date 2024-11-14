@@ -62,7 +62,7 @@
           background-color: darkcyan;
           border: 1px solid skyblue;
           padding: 6px;
-          font-size: 16px;
+          font-size: 12px;
           font-weight: bold;
           color: white;
         }
@@ -70,7 +70,7 @@
         td {
           border: 1px solid skyblue;
           padding: 8px;
-          font-size: 14px;
+          font-size: 12px;
           color: white;
         }
         
@@ -127,7 +127,7 @@
             <table class="table_deg">
                 <tr>
                     <th> Sr  </th>
-                    <th> ID  </th>
+                    <!--<th> ID  </th>-->
                     <th> Account Title </th>
                     <th> Type </th>
                     <th> Parent </th>
@@ -141,7 +141,7 @@
                 <tr>
                     <!-- SrNo column -->
                     <td> {{ (int) $index + 1 }} </td>
-                    <td> {{$account->acId}} </td>
+                    <!--<td> {{$account->acId}} </td>-->
                     <td class="left"> {{$account->acTitle}} </td>
                     <td> {{$account->accTypeTitle}} </td>
                     <td> {{$account->accParentTitle}} </td>

@@ -17,129 +17,93 @@ class TrialController extends BaseController
     /**
      * Display a listing of the resource.
      */
+    
     public function index(Request $request)
     {
-        $uId = $request->uId;
-        $areaId = $request->areaId;
-        $accTypeId = $request->accTypeId;
-
+        $uId = (int)$request->uId;   // Ensure uId is an integer
+        $areaId = (int)$request->areaId;  // Same for areaId if needed
+        $accTypeId = (int)$request->accTypeId;  // Same for accTypeId if needed
+    
         $dateFrom = $request->dateFrom;
         $dateTo = $request->dateTo;
     
         $formatFrom = Carbon::parse($dateFrom)->format('Y-m-d');
         $formatTo = Carbon::parse($dateTo)->format('Y-m-d');
-    
-        // Query for debit sums
-        $debits = Vouchers::select(
-                'drAcId AS acId', 
-                'accounts.acTitle',
-                'acctype.accTypeTitle',
+        
+        // Combine debits and credits using a union
+        $query = DB::table(DB::raw("( 
+                SELECT
+                COALESCE(vouchers.drAcId, 0) AS acId,
+                accounts.acTitle,
+                acctype.accTypeTitle,
+                SUM(vouchers.debit) AS debit,
+                SUM(vouchers.debitSR) AS debitSR,
+                0 AS totalCredit,
+                0 AS totalCreditSR
+            FROM
+                vouchers
+            LEFT JOIN accounts ON vouchers.drAcId = accounts.acId
+            LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
+            WHERE
+                vouchers.uId = ? AND vouchers.voucherDate BETWEEN ? AND ?
+            GROUP BY
+                vouchers.drAcId,
+                accounts.acTitle,
+                acctype.accTypeTitle
+            UNION ALL
+            SELECT
+                COALESCE(vouchers.crAcId, 0) AS acId,
+                accounts.acTitle,
+                acctype.accTypeTitle,
+                0 AS totalDebit,
+                0 AS totalDebitSR,
+                SUM(vouchers.credit) AS credit,
+                SUM(vouchers.creditSR) AS creditSR
+            FROM
+                vouchers
+            LEFT JOIN accounts ON vouchers.crAcId = accounts.acId
+            LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
+            WHERE
+                vouchers.uId = ? AND vouchers.voucherDate BETWEEN ? AND ?
+            GROUP BY
+                vouchers.crAcId,
+                accounts.acTitle,
+                acctype.accTypeTitle) AS combined"))
+            ->select(
+                'acId',
+                'acTitle',
+                'accTypeTitle',
                 DB::raw('SUM(debit) AS debit'),
                 DB::raw('SUM(debitSR) AS debitSR'),
-                DB::raw('0 AS credit'),
-                DB::raw('0 AS creditSR')
+                DB::raw('SUM(totalCredit) AS credit'),
+                DB::raw('SUM(totalCreditSR) AS creditSR')
             )
-                ->leftJoin('accounts', 'vouchers.drAcId', '=', 'accounts.acId')
-                ->leftJoin('acctype AS acctype', 'accounts.accTypeId', '=', 'acctype.accTypeId')
-                ->where('vouchers.uId', $uId)
-                // ->where('accounts.areaId', $areaId)
-                //  ->where('accounts.accTypeId', $accTypeId)
-                ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
-                ->groupBy('drAcId', 'accounts.acTitle', 'acctype.accTypeTitle')
-                ->orderBy('accounts.acTitle', 'desc');
-
-                // Conditionally add the accTypeId filter if it's not 'ALL'
-                if ($accTypeId !== 'ALL') {
-                    $debits = $debits->where('accounts.accTypeId', $accTypeId);
-                }
-
-                // Conditionally add the areaId filter if it's not 'ALL'
-                if ($areaId !== 'ALL') {
-                    $debits = $debits->where('accounts.areaId', $areaId);
-                }
-
-        // Query for credit sums
-        $credits = Vouchers::select(
-                'crAcId AS acId', 
-                'accounts.acTitle',
-                'acctype.accTypeTitle',
-                DB::raw('0 AS debit'),
-                DB::raw('0 AS debitSR'),
-                DB::raw('SUM(credit) AS credit'),
-                DB::raw('SUM(creditSR) AS creditSR')
-            )
-                ->leftJoin('accounts', 'vouchers.crAcId', '=', 'accounts.acId')
-                ->leftJoin('acctype', 'accounts.accTypeId', '=', 'acctype.accTypeId')
-                ->where('vouchers.uId', $uId)
-                // ->where('accounts.areaId', $areaId)
-                // ->where('accounts.accTypeId', $accTypeId)
-                ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
-                ->groupBy('crAcId', 'accounts.acTitle', 'acctype.accTypeTitle')
-                ->orderBy('accounts.acTitle', 'desc');
-
-                // Conditionally add the accTypeId filter if it's not 'ALL'
-                if ($accTypeId !== 'ALL') {
-                    $credits = $credits->where('accounts.accTypeId', $accTypeId);
-                }
-
-                // Conditionally add the areaId filter if it's not 'ALL'
-                if ($areaId !== 'ALL') {
-                    $credits = $credits->where('accounts.areaId', $areaId);
-                }                
-
-
-                                // // Print the SQL query for the debit query
-                                // \Log::info($debits->toSql()); // Logs only the SQL query without bindings
-                                // \Log::info($debits->getBindings()); // Logs the bindings used in the query
-
-                                // // Or simply output the complete query including bindings for debug purposes
-                                // $query = $debits->toSql();
-                                // $bindings = $debits->getBindings();
-                                // $fullQuery = vsprintf(str_replace("?", "'%s'", $query), $bindings);
-                                // \Log::info($fullQuery); // Logs the full query with bindings
-
-                                // // For the credits query
-                                // \Log::info($credits->toSql()); // Logs only the SQL query without bindings
-                                // \Log::info($credits->getBindings()); // Logs the bindings
-
-                                // // Combine query and bindings for credits
-                                // $query = $credits->toSql();
-                                // $bindings = $credits->getBindings();
-                                // $fullQuery = vsprintf(str_replace("?", "'%s'", $query), $bindings);
-                                // \Log::info($fullQuery); // Logs the full query with bindings
-
-
-
-            // Combine both queries using union
-            $debitResults = $debits->get();  // Get results for debits
-            $creditResults = $credits->get(); // Get results for credits
-
-            // Merge the results
-            $mergedResults = $debitResults->merge($creditResults);
-
-            // Group by the necessary fields
-            $groupedResults = $mergedResults->groupBy(function ($item) {
-                return $item->acId; // Group by acId
-            });
-
-            // Sort the results by acTitle (after grouping)
-            $sortedResults = $groupedResults->sortBy(function ($item) {
-                return $item->first()->acTitle; // Sort by acTitle of the first item in each group
-            });
-
-            // Prepare final data
-            $data['vouchers'] = $sortedResults->map(function ($items, $key) {
-                return [
-                    'acId' => $key,
-                    'acTitle' => $items->first()->acTitle,
-                    'accTypeTitle' => $items->first()->accTypeTitle,
-                    'debit' => $items->sum('debit'),
-                    'credit' => $items->sum('credit'),
-                    'debitSR' => $items->sum('debitSR'),
-                    'creditSR' => $items->sum('creditSR'),
-                ];
-            })->values(); // Get the final indexed array
-
-            return $this->sendResponse($data, 'Trial Balance Data');
+            ->groupBy('acId', 'acTitle', 'accTypeTitle')
+            ->havingRaw('acId <> 0')
+            ->orderBy('acTitle')
+            ->setBindings([$uId, $formatFrom, $formatTo, $uId, $formatFrom, $formatTo]);
+    
+        $data = $query->get();
+    
+        // Transform the results into the desired format
+        $sortedResults = $data->groupBy('acId'); // Group by 'acId'
+    
+        // Prepare final data in the desired format
+        $formattedData = $sortedResults->map(function ($items, $key) {
+            return [
+                'acId' => $key,
+                'acTitle' => $items->first()->acTitle,   // Get the acTitle from the first item
+                'accTypeTitle' => $items->first()->accTypeTitle,  // Get accTypeTitle from the first item
+                'debit' => $items->sum('debit'),         // Sum all the debit values for this group
+                'credit' => $items->sum('credit'),       // Sum all the credit values for this group
+                'debitSR' => $items->sum('debitSR'),     // Sum all the debitSR values for this group
+                'creditSR' => $items->sum('creditSR'),   // Sum all the creditSR values for this group
+            ];
+        })->values();  // Reset keys after mapping
+    
+        // Return the final formatted data in response
+        return $this->sendResponse(['vouchers' => $formattedData], 'Trial Balance Data');
     }
+
+
 }

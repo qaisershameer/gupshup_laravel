@@ -28,13 +28,14 @@
                   </ul>
                 </li>
 
-                <li><a href="/home"> <i class="icon-logout"></i>Login </a></li>
+                <li><a href="{{url('/home')}}"> <i class="icon-logout"></i>Login </a></li>
 
         </ul><span class="heading">Extras</span>        
         <ul class="list-unstyled">
-          <li> <a href="/home"> <i class="icon-settings"></i>Settings </a></li>
-          <li> <a href="/home"> <i class="icon-writing-whiteboard"></i>Project View </a></li>
-          <li> <a href="/home"> <i class="icon-chart"></i>Financial Stats </a></li>
+          <!--<li> <a href="{{url('view_food')}}"> <i class="icon-settings"></i>Settings </a></li>-->
+          <li> <a href="{{url('view_food')}}"> <i class="icon-settings"></i>Settings </a></li>
+          <li> <a href="{{url('/home')}}"> <i class="icon-writing-whiteboard"></i>Project View </a></li>
+          <li> <a href="{{url('/home')}}"> <i class="icon-chart"></i>Financial Stats </a></li>
         </ul>
       </nav>
       <!-- Sidebar Navigation end-->

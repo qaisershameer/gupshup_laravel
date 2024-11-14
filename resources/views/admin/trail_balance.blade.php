@@ -26,7 +26,7 @@
         }
 
         .table_deg {
-            width: 1000px;
+            width: 1200px;
             text-align: center;
             margin: left;
             margin-top: 10px;
@@ -36,7 +36,9 @@
         .sar-th {
             font-weight: bold; 
             background-color:deepskyblue;
-            color: white;            
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
         }
         
         .sar-total {
@@ -44,12 +46,14 @@
             text-align: right;
             font-weight: bold;
             color: white;
+            font-size: 14px;
         }
                 
         .pkr-th {
             background-color: mediumSeaGreen;
             color: white; 
             font-weight: bold;
+            font-size: 14px;
         }
         
         .pkr-total {
@@ -57,6 +61,7 @@
             color: white; 
             text-align: right;
             font-weight: bold;
+            font-size: 14px;
         }
         
         .right {
@@ -71,7 +76,7 @@
           background-color: darkcyan;
           border: 1px solid skyblue;
           padding: 6px;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: bold;
           color: white;
         }
@@ -119,15 +124,17 @@
                         <tr>
                             <th> Sr. # </th>
                             <th> Account Title </th>
-                            <th colspan="2"> SAR </th>
-                            <th colspan="2"> PKR</th>
+                            <th colspan="3"> SAR </th>
+                            <th colspan="3"> PKR</th>
                         </tr>
                         <tr>
                             <td colspan="2"></td>
                             <td class="sar-th">Dr</td>
                             <td class="sar-th">Cr</td>
+                            <td class="sar-th">Balance</td>
                             <td class="pkr-th">Dr</td>
                             <td class="pkr-th">Cr</td>
+                            <td class="pkr-th">Balance</td>
                         </tr>
                     </thead>
                     
@@ -139,22 +146,15 @@
                             $sum_debitSR = 0;
                             $sum_creditSR = 0;
                             
-                            $sum_SAR = 0;
-                            $sum_PKR = 0;
+                            $row_balance_SAR = 0;
+                            $row_balance_PKR = 0;
+                            
+                            $sum_BF_SAR = 0;
+                            $sum_BF_PKR = 0;
                         ?>
                         
                         @foreach ($data as $index => $trail)
-                        <tr>
-                            <td> {{ (int) $index + 1 }} </td>
-                           <td class="left"> {{ $trail->acTitle }} </td>
-    
-                            <td class="right">{!! $trail->debitSR == 0 ? '&nbsp;' : number_format($trail->debitSR, 0, '.', ',') !!}</td>
-                            <td class="right">{!! $trail->creditSR == 0 ? '&nbsp;' : number_format($trail->creditSR, 0, '.', ',') !!}</td>
-                            
-                            <td class="right">{!! $trail->debit == 0 ? '&nbsp;' : number_format($trail->debit, 2, '.', ',') !!}</td>
-                            <td class="right">{!! $trail->credit == 0 ? '&nbsp;' : number_format($trail->credit, 2, '.', ',') !!}</td>
-                        </tr>
-        
+
                         <?php
                             $sum_debitSR += $trail->debitSR;
                             $sum_creditSR += $trail->creditSR;
@@ -162,9 +162,26 @@
                             $sum_debit += $trail->debit;
                             $sum_credit += $trail->credit;
                             
-                            $sum_SAR += ($trail->debitSR - $trail->creditSR);
-                            $sum_PKR += ($trail->debit - $trail->credit);
+                            $row_balance_SAR = $trail->debitSR - $trail->creditSR;
+                            $row_balance_PKR = $trail->debit - $trail->credit;
+                            
+                            $sum_BF_SAR += ($trail->debitSR - $trail->creditSR);
+                            $sum_BF_PKR += ($trail->debit - $trail->credit);
                         ?>
+                        
+                        <tr>
+                            <td> {{ (int) $index + 1 }} </td>
+                            <td class="left"> {{ $trail->acTitle }} </td>
+    
+                            <td class="right"> {!! $trail->debitSR == 0 ? '&nbsp;' : number_format($trail->debitSR, 0, '.', ',') !!} </td>
+                            <td class="right"> {!! $trail->creditSR == 0 ? '&nbsp;' : number_format($trail->creditSR, 0, '.', ',') !!} </td>
+                            <td class="right sar-th"> {!! $row_balance_SAR == 0 ? '-' : number_format($row_balance_SAR, 0, '.', ',') !!} </td>
+                            
+                            <td class="right"> {!! $trail->debit == 0 ? '&nbsp;' : number_format($trail->debit, 2, '.', ',') !!} </td>
+                            <td class="right"> {!! $trail->credit == 0 ? '&nbsp;' : number_format($trail->credit, 2, '.', ',') !!} </td>
+                            <td class="right pkr-th"> {!! $row_balance_PKR == 0 ? '-' : number_format($row_balance_PKR, 0, '.', ',') !!} </td>
+
+                        </tr>
                         
                         @endforeach
                         
@@ -173,16 +190,18 @@
                             <th class="right" >Totals : </th>
                             <td class="sar-total">{{ number_format($sum_debitSR, 0, '.', ',') }}</td>
                             <td class="sar-total">{{ number_format($sum_creditSR, 0, '.', ',') }}</td>
+                            <th class="right">{{ number_format($sum_BF_SAR, 0, '.', ',') }}</th>
                             <td class="pkr-total">{{ number_format($sum_debit, 2, '.', ',') }}</td>
                             <td class="pkr-total">{{ number_format($sum_credit, 2, '.', ',') }}</td>
+                            <th class="right">{{ number_format($sum_BF_PKR, 2, '.', ',') }}</th>
                         </tr>
         
-                        <tr>
-                            <td></td>
-                            <th class="right">B/F Balance : </th>
-                            <th colspan="2" class="right">{{ number_format($sum_SAR, 0, '.', ',') }}</th>
-                            <th colspan="2" class="right">{{ number_format($sum_PKR, 2, '.', ',') }}</th>
-                        </tr>
+                        <!--<tr>-->
+                        <!--    <td></td>-->
+                        <!--    <th class="right">B/F Balance : </th>-->
+                        <!--    <th colspan="3" class="right">{{ number_format($sum_BF_SAR, 0, '.', ',') }}</th>-->
+                        <!--    <th colspan="3" class="right">{{ number_format($sum_BF_PKR, 2, '.', ',') }}</th>-->
+                        <!--</tr>-->
                         
                     </tbody>
                 </table>

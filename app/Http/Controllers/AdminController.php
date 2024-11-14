@@ -212,7 +212,12 @@ class AdminController extends Controller
     
     public function view_currency()
     {
-        $data = Currency::orderBy('currencyTitle')->get();
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $data = Currency::where('uId', $uId)->orderBy('currencyTitle')->get();
         return view('admin.currency', compact('data')); 
     }
       
@@ -224,12 +229,12 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = new Currency;
 
         $data->currencyTitle = $request->currency_name;
-        $data->uId = $uid;
+        $data->uId = $uId;
 
         $data->save();
 
@@ -240,8 +245,12 @@ class AdminController extends Controller
 
     public function edit_currency($id)
     {        
-
-        $data = Currency::find($id);
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $data = Currency::where('uId', $uId)->find($id);
         
         return view('admin.edit_currency', compact('data'));
     }
@@ -253,7 +262,7 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
                 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = Currency::find($id);
 
@@ -287,7 +296,13 @@ class AdminController extends Controller
     
     public function view_area()
     {
-        $data = Area::orderBy('areaTitle')->get();
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $data = Area::where('uId', $uId)->orderBy('areaTitle')->get();
+        
         return view('admin.area', compact('data')); 
     }
     
@@ -299,12 +314,12 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = new Area;
 
         $data->areaTitle = $request->area_name;
-        $data->uId = $uid;
+        $data->uId = $uId;
 
         $data->save();
 
@@ -328,7 +343,7 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
                 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = Area::find($id);
 
@@ -362,7 +377,13 @@ class AdminController extends Controller
     
     public function view_acctype()
     {
-        $data = AccType::orderBy('accTypeId')->get();
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $data = AccType::where('uId', $uId)->orderBy('accTypeId')->get();
+        
         return view('admin.acctype', compact('data')); 
     }
 
@@ -374,12 +395,12 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = new AccType;
 
         $data->accTypeTitle = $request->acctype_name;
-        $data->uId = $uid;
+        $data->uId = $uId;
 
         $data->save();
 
@@ -403,7 +424,7 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
                 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = AccType::find($id);
 
@@ -437,7 +458,13 @@ class AdminController extends Controller
     
     public function view_accparent()
     {
-        $accType = AccType::orderBy('accTypeId')->get();
+
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $accType = AccType::where('uId', $uId)->orderBy('accTypeId')->get();
 
         $data = AccParent::select('accparent.parentId', 
                                             'accparent.accParentTitle', 
@@ -445,7 +472,7 @@ class AdminController extends Controller
                                             'accparent.accTypeId',
                                             'acctype.accTypeTitle')
                                         ->join('acctype', 'accparent.accTypeId', '=', 'acctype.accTypeId')
-                                        // ->where('accounts.uId', $uId)
+                                        ->where('accparent.uId', $uId)
                                         ->orderBy('acctype.accTypeTitle')
                                         ->orderBy('accparent.accParentTitle')
                                         ->get();
@@ -461,13 +488,13 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = new AccParent;
 
         $data->accParentTitle = $request->accparent_name;
         $data->accTypeId = $request->accTypeId;
-        $data->uId = $uid;
+        $data->uId = $uId;
 
         $data->save();
 
@@ -478,8 +505,12 @@ class AdminController extends Controller
 
     public function edit_accparent($id)
     {        
-
-        $accType = AccType::orderBy('accTypeId')->get();
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $accType = AccType::where('uId', $uId)->orderBy('accTypeId')->get();
 
         $data = AccParent::select('accparent.parentId', 
                                             'accparent.accParentTitle', 
@@ -502,13 +533,13 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
                 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = AccParent::find($id);
 
         $data->accParentTitle = $request->accparent_name;
         $data->accTypeId = $request->accTypeId;
-        $data->uId = $uid;
+        $data->uId = $uId;
 
         $data->save();
 
@@ -538,13 +569,18 @@ class AdminController extends Controller
     
     public function view_accounts()
     {
-        $accType = AccType::orderBy('accTypeId')->get();
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $accType = AccType::where('uId', $uId)->orderBy('accTypeId')->get();
 
-        $accParent = AccParent::orderBy('accParentTitle')->get();
+        $accParent = AccParent::where('uId', $uId)->orderBy('accParentTitle')->get();
 
-        $area = Area::orderBy('areaTitle')->get();
+        $area = Area::where('uId', $uId)->orderBy('areaTitle')->get();
 
-        $currency = Currency::orderBy('currencyTitle')->get();
+        $currency = Currency::where('uId', $uId)->orderBy('currencyTitle')->get();
 
         $data = Accounts::select('accounts.acId',
                                     'accounts.acTitle',                                    
@@ -561,7 +597,7 @@ class AdminController extends Controller
                                 ->join('acctype', 'accounts.accTypeID', '=', 'acctype.accTypeId')
                                 ->join('accparent', 'accounts.parentId', '=', 'accparent.parentId')
                                 ->join('area', 'accounts.areaId', '=', 'area.areaId')
-                                // ->where('accounts.uId', $uId)
+                                ->where('accounts.uId', $uId)
                                 // ->orderBy('accType.accTypeTitle')
                                 ->orderBy('accounts.acTitle')
                                 ->get();
@@ -575,11 +611,9 @@ class AdminController extends Controller
     {
 
         // Check if user is authenticated
-        if (!Auth::check()) {
-            return redirect()->route('login'); // or handle accordingly
+        if (!Auth::check()) {return redirect()->route('login'); // or handle accordingly
         }
-
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = new Accounts;
 
@@ -588,7 +622,7 @@ class AdminController extends Controller
         $data->parentId = $request->parentId;
         $data->areaId = $request->areaId;
         $data->currencyId = $request->currencyId;
-        $data->uId = $uid;
+        $data->uId = $uId;
 
         $data->save();
 
@@ -598,15 +632,20 @@ class AdminController extends Controller
     }
 
     public function edit_account($id)
-    {        
+    {
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login'); // or handle accordingly
+        }
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
 
-        $accType = AccType::orderBy('accTypeId')->get();
+        $accType = AccType::where('uId', $uId)->orderBy('accTypeId')->get();
 
-        $accParent = AccParent::orderBy('accParentTitle')->get();
+        $accParent = AccParent::where('uId', $uId)->orderBy('accParentTitle')->get();
 
-        $area = Area::orderBy('areaTitle')->get();
+        $area = Area::where('uId', $uId)->orderBy('areaTitle')->get();
 
-        $currency = Currency::orderBy('currencyTitle')->get();
+        $currency = Currency::where('uId', $uId)->orderBy('currencyTitle')->get();
 
         $data = DB::table('accounts')
                         ->select(
@@ -642,7 +681,7 @@ class AdminController extends Controller
             return redirect()->route('login');
         }
     
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
     
         $data = Accounts::find($id);
 
@@ -652,7 +691,7 @@ class AdminController extends Controller
         $data->parentId = $request->parentId;
         $data->areaId = $request->areaId;
         $data->currencyId = $request->currencyId;
-        $data->uId = $uid;
+        $data->uId = $uId;
         
         $data->save();
     
@@ -683,12 +722,18 @@ class AdminController extends Controller
     
     public function view_vouchersCR(Request $request)
     {
+
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
         // $data = Vouchers::orderBy('voucherPrefix')->get();
 
         $voucherPrefix = $request->voucherPrefix;
 
         // $accounts = Accounts::orderBy('accTypeId')->orderBy('acTitle')->get();
-        $accounts = Accounts::orderBy('acTitle')->get();
+        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
 
         $data = DB::table('vouchers')
                         ->select('vouchers.voucherId',
@@ -710,7 +755,7 @@ class AdminController extends Controller
                                 ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
                                 ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                                 ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
-                            // ->where('vouchers.uId', $uId)
+                            ->where('vouchers.uId', $uId)
                             // ->where('vouchers.voucherPrefix', $voucherPrefix)
                             ->where('vouchers.voucherPrefix', 'CR')
                             ->orderBy('vouchers.voucherDate', 'desc')
@@ -725,12 +770,18 @@ class AdminController extends Controller
 
     public function view_vouchersCP(Request $request)
     {
+
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
         // $data = Vouchers::orderBy('voucherPrefix')->get();
 
         $voucherPrefix = $request->voucherPrefix;
 
         // $accounts = Accounts::orderBy('accTypeId')->orderBy('acTitle')->get();
-        $accounts = Accounts::orderBy('acTitle')->get();
+        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
 
         $data = DB::table('vouchers')
                         ->select('vouchers.voucherId',
@@ -753,7 +804,7 @@ class AdminController extends Controller
                                 ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
                                 ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                                 ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
-                            // ->where('vouchers.uId', $uId)
+                            ->where('vouchers.uId', $uId)
                             // ->where('vouchers.voucherPrefix', $voucherPrefix)
                             ->where('vouchers.voucherPrefix', 'CP')
                             ->orderBy('vouchers.voucherDate', 'desc')
@@ -768,9 +819,14 @@ class AdminController extends Controller
 
     public function view_vouchersJV(Request $request)
     {
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
         $voucherPrefix = $request->voucherPrefix;
 
-        $accounts = Accounts::orderBy('acTitle')->get();
+        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
 
         $data = DB::table('vouchers')
                         ->select('vouchers.voucherId',
@@ -793,7 +849,7 @@ class AdminController extends Controller
                                 ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
                                 ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                                 ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
-                            // ->where('vouchers.uId', $uId)
+                            ->where('vouchers.uId', $uId)
                             // ->where('vouchers.voucherPrefix', $voucherPrefix)
                             ->where('vouchers.voucherPrefix', 'JV')
                             ->orderBy('vouchers.voucherDate', 'desc')
@@ -814,7 +870,7 @@ class AdminController extends Controller
             return redirect()->route('login'); // or handle accordingly
         }
 
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = new Vouchers;
 
@@ -827,7 +883,7 @@ class AdminController extends Controller
         $data->voucherDate = $formattedDate;
         $data->voucherPrefix = $voucherPrefix;
         $data->remarks = $request->remarks;
-        $data->uId = $uid;
+        $data->uId = $uId;
 
         if ($voucherPrefix == 'CR')
         {
@@ -863,7 +919,12 @@ class AdminController extends Controller
 
     public function edit_crv($id)
     {        
-        $accounts = Accounts::orderBy('acTitle')->get();
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
 
         $data = DB::table('vouchers')
                         ->select(
@@ -887,7 +948,7 @@ class AdminController extends Controller
                         ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
                         ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                         ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
-                        ->where('vouchers.voucherId', $id)                        
+                        ->where('vouchers.voucherId', $id)
                         // ->orderBy('accounts.acTitle')
                         ->first(); // get();
         
@@ -897,7 +958,12 @@ class AdminController extends Controller
 
     public function edit_cpv($id)
     {        
-        $accounts = Accounts::orderBy('acTitle')->get();
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
         
         $data = DB::table('vouchers')
                         ->select(
@@ -930,8 +996,13 @@ class AdminController extends Controller
     }
 
     public function edit_jv($id)
-    {        
-        $accounts = Accounts::orderBy('acTitle')->get();
+    {   
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
 
         $data = DB::table('vouchers')
                         ->select(
@@ -970,7 +1041,7 @@ class AdminController extends Controller
             return redirect()->route('login');
         }
     
-        $uid = Auth::id(); // Get the currently authenticated user's ID
+        $uId = Auth::id(); // Get the currently authenticated user's ID
     
         $data = Vouchers::find($id);
 
@@ -984,7 +1055,7 @@ class AdminController extends Controller
         $data->voucherDate = $formattedDate;
         $data->voucherPrefix = $voucherPrefix;
         $data->remarks = $request->remarks;
-        $data->uId = $uid;
+        $data->uId = $uId;
 
         if ($voucherPrefix == 'CR')
         {
@@ -1045,14 +1116,15 @@ class AdminController extends Controller
     public function ac_ledger(Request $request)
     {
         
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
         
         $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
         $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
         $acId = $request->acId;
-        $accounts = Accounts::orderBy('acTitle')->get();
+        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
         
         // dd($datefrom, $datefrom);
         
@@ -1079,7 +1151,7 @@ class AdminController extends Controller
                                 ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
                                 ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                                 ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
-                            // ->where('vouchers.uId', $uId)
+                            ->where('vouchers.uId', $uId)
                             ->where(function($query) use ($acId)
                             {$query
                                 ->where('vouchers.drAcId', $acId)
@@ -1098,9 +1170,10 @@ class AdminController extends Controller
     
     public function cash_book(Request $request)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login');}
+        
+        $uId = Auth::id(); // Get the currently authenticated user's ID
         
         $datefrom = $request->has('dateFrom') ? Carbon::parse($request->dateFrom)->format('Y-m-d') : now()->format('Y-m-d');
         $dateto = $request->has('dateTo') ? Carbon::parse($request->dateTo)->format('Y-m-d') : now()->format('Y-m-d');
@@ -1127,6 +1200,7 @@ class AdminController extends Controller
                     ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
                     ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                     ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
+                    ->where('vouchers.uId', $uId)
                     ->whereIn('vouchers.voucherPrefix', ['CR', 'CP'])
                     ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
                     ->orderBy('vouchers.voucherDate', 'desc')
@@ -1137,8 +1211,6 @@ class AdminController extends Controller
         return view('admin.cash_book', compact('data','datefrom','dateto')); 
     }
 
-    //////////////////// TRAIL BALANCE REPORT ////////////////////
-    
     //////////////////// TRAIL BALANCE REPORT ////////////////////
     
     public function trail_balance(Request $request)
@@ -1153,66 +1225,64 @@ class AdminController extends Controller
         $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
         $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
 
+        // Combine debits and credits using a union
+        $query = DB::table(DB::raw("( 
+            SELECT
+            COALESCE(vouchers.drAcId, 0) AS acId,
+            accounts.acTitle,
+            acctype.accTypeTitle,
+            SUM(vouchers.debit) AS debit,
+            SUM(vouchers.debitSR) AS debitSR,
+            0 AS totalCredit,
+            0 AS totalCreditSR
+        FROM
+            vouchers
+        LEFT JOIN accounts ON vouchers.drAcId = accounts.acId
+        LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
+        WHERE
+            vouchers.uId = ? AND vouchers.voucherDate BETWEEN ? AND ?
+        GROUP BY
+            vouchers.drAcId,
+            accounts.acTitle,
+            acctype.accTypeTitle
+        UNION ALL
+        SELECT
+            COALESCE(vouchers.crAcId, 0) AS acId,
+            accounts.acTitle,
+            acctype.accTypeTitle,
+            0 AS totalDebit,
+            0 AS totalDebitSR,
+            SUM(vouchers.credit) AS credit,
+            SUM(vouchers.creditSR) AS creditSR
+        FROM
+            vouchers
+        LEFT JOIN accounts ON vouchers.crAcId = accounts.acId
+        LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
+        WHERE
+            vouchers.uId = ? AND vouchers.voucherDate BETWEEN ? AND ?
+        GROUP BY
+            vouchers.crAcId,
+            accounts.acTitle,
+            acctype.accTypeTitle) AS combined"))
+        ->select(
+            'acId',
+            'acTitle',
+            'accTypeTitle',
+            DB::raw('SUM(debit) AS debit'),
+            DB::raw('SUM(debitSR) AS debitSR'),
+            DB::raw('SUM(totalCredit) AS credit'),
+            DB::raw('SUM(totalCreditSR) AS creditSR')
+        )
+        // ->whereNotNull('acId')
+        ->groupBy('acId', 'acTitle', 'accTypeTitle')
+        ->having('acId', '<>', 0)
+        ->orderBy('acTitle')
+        ->setBindings([$uId, $datefrom, $dateto, $uId, $datefrom, $dateto]);
+        $data =$query->get();
+        
+        // dd($query->toSql());
 
-
-// Combine debits and credits using a union
-// Debit query with alias
-
-$startDate = '2024-01-01';
-$endDate = '2024-12-31';
-$uId = 1;
-
-$query = DB::table(DB::raw("( 
-    SELECT 
-        COALESCE(vouchers.drAcId, 0) AS acId, 
-        accounts.acTitle, 
-        acctype.accTypeTitle, 
-        SUM(vouchers.debit) AS totalDebit, 
-        SUM(vouchers.debitSR) AS totalDebitSR, 
-        0 AS totalCredit, 
-        0 AS totalCreditSR
-    FROM vouchers
-    LEFT JOIN accounts ON vouchers.drAcId = accounts.acId
-    LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
-    WHERE vouchers.uId = ? 
-      AND vouchers.voucherDate BETWEEN ? AND ?
-    GROUP BY vouchers.drAcId, accounts.acTitle, acctype.accTypeTitle
-    
-    UNION ALL
-    
-    SELECT 
-        COALESCE(vouchers.crAcId, 0) AS acId, 
-        accounts.acTitle, 
-        acctype.accTypeTitle, 
-        0 AS totalDebit, 
-        0 AS totalDebitSR, 
-        SUM(vouchers.credit) AS totalCredit, 
-        SUM(vouchers.creditSR) AS totalCreditSR
-    FROM vouchers
-    LEFT JOIN accounts ON vouchers.crAcId = accounts.acId
-    LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
-    WHERE vouchers.uId = ? 
-      AND vouchers.voucherDate BETWEEN ? AND ?
-    GROUP BY vouchers.crAcId, accounts.acTitle, acctype.accTypeTitle
-) AS combined"))
-->select(
-    'acId',
-    'acTitle',
-    'accTypeTitle',
-    DB::raw('SUM(totalDebit) AS totalDebit'),
-    DB::raw('SUM(totalDebitSR) AS totalDebitSR'),
-    DB::raw('SUM(totalCredit) AS totalCredit'),
-    DB::raw('SUM(totalCreditSR) AS totalCreditSR')
-)
-->groupBy('acId', 'acTitle', 'accTypeTitle')
-->orderBy('acTitle', 'DESC')
-->setBindings([$uId, $startDate, $endDate, $uId, $startDate, $endDate]);
-$data =$query->get();
-
-// Execute the raw query with bindings for user ID and date range
-
-
-    
+        // Execute the raw query with bindings for user ID and date range    
         return view('admin.trail_balance', compact('data', 'accounts', 'datefrom', 'dateto'));
     }
 

@@ -62,7 +62,7 @@
           background-color: darkcyan;
           border: 1px solid skyblue;
           padding: 6px;
-          font-size: 16px;
+          font-size: 12px;
           font-weight: bold;
           color: white;
         }
@@ -70,7 +70,7 @@
         td {
           border: 1px solid skyblue;
           padding: 8px;
-          font-size: 14px;
+          font-size: 12px;
           color: white;
         }
         
@@ -106,7 +106,7 @@
             <table class="table_deg">
                 <tr>
                     <th> Sr  </th>
-                    <th> ID </th>
+                    <!--<th> ID </th>-->
                     <th> Parent Title </th>
                     <th> Account Type </th>                    
                     <!--<th> Updated @ </th>-->
@@ -117,7 +117,7 @@
                 <tr>
                     <!-- SrNo column -->
                     <td>{{ $key + 1 }}</td>
-                    <td> {{$data->parentId}} </td>
+                    <!--<td> {{$data->parentId}} </td>-->
                     <td> {{$data->accParentTitle}} </td>
                     <td> {{$data->accTypeTitle}} </td>                    
                     <!--<td> {{ \Carbon\Carbon::parse($data->updated_at)->format('d-M-y') }} </td>-->
