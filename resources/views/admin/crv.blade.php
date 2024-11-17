@@ -5,7 +5,7 @@
     
         /* Date text select input */
         input[type='date'], [type='text'], select {
-          width: 205px;
+          width: 270px;
           height: 45px;
           padding: 0 10px;
           font-size: 16px;
@@ -62,7 +62,7 @@
         }
  
         .table_deg {
-            width: 1000px;
+            width: 1200px;
             text-align: center;
             margin: left;
             margin-top: 10px;
@@ -73,7 +73,7 @@
           background-color: darkcyan;
           border: 1px solid skyblue;
           padding: 6px;
-          font-size: 16px;
+          font-size: 12px;
           font-weight: bold;
           color: white;
         }
@@ -81,7 +81,7 @@
         td {
           border: 1px solid skyblue;
           padding: 8px;
-          font-size: 14px;
+          font-size: 12px;
           color: white;
         }
     </style>
@@ -100,7 +100,7 @@
                     <input type="hidden" id="voucherPrefix" name="voucherPrefix" value="CR">
 
                     <!-- Input for Voucher Date -->
-                    <input type="date" id="dateInput" name="voucherDate" placeholder="10-Nov-2024" required>
+                    <input type="date" id="dateInput" name="voucherDate" required>
 
                     <!-- Select box for accounts -->
                     <select name="acId" id="accountSelect" class="select2" required>
@@ -130,26 +130,29 @@
                 <th> Sr. </th>
                 <th> Date </th>
                 <th> VC </th>
-                <th> Account </th>
-                <th> SAR </th>
-                <th> PKR </th>
+                <th> Ref. Account </th>
                 <th> Remarks </th>
+                <th class="sar-th"> SAR </th>
+                <th class=" pkr-th"> PKR </th>
                 <th> Action </th>
             </tr>
 
             @foreach ($data as $index => $vouchers)
             <tr>
                 <td> {{ (int) $index + 1 }} </td>
-                <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d-M-y') }} </td>
+                <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d M') }} </td>
                 <td> {{$vouchers->voucherPrefix}} </td>
-                <td> {{$vouchers->crAcTitle}} </td>
+                <td class="left"> {{$vouchers->crAcTitle}} </td>
+                <td class="left"> {{$vouchers->remarks}} </td>
+                
                 <td class="right">{!! $vouchers->creditSR == 0 ? '&nbsp;' : number_format($vouchers->creditSR, 0, '.', ',') !!}</td>
                 <td class="right">{!! $vouchers->credit == 0 ? '&nbsp;' : number_format($vouchers->credit, 2, '.', ',') !!}</td>
-                <td> {{$vouchers->remarks}} </td>
+                
                 <td>
                     <a class="btn btn-success" href="{{url('edit_crv', $vouchers->voucherId)}}"><i class="fas fa-pencil-alt"></i></a>
                     <a class="btn btn-danger" onclick="confirmation(event)" href="{{url('delete_voucher', $vouchers->voucherId)}}"><i class="fas fa-trash-alt"></i></a>
                 </td>                        
+                
             </tr>
             @endforeach
         </table>

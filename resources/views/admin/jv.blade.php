@@ -5,39 +5,12 @@
     
         input[type='text'], input[type='date'], select
         {
-          width: 300px;
+          width: 400px;
           height: 30px;
           padding: 0 10px;
           font-size: 16px;
           box-sizing: border-box;
         }
-
-        /* Date input */
-        /*input[type='date'] {*/
-        /*  width: 250px;*/
-        /*  height: 30px;*/
-        /*  padding: 0 10px;*/
-        /*  font-size: 16px;*/
-        /*  box-sizing: border-box;*/
-        /*}*/
-
-        /* Select input */
-        /*input[type='select'] {*/
-        /*  width: 300px;*/
-        /*  height: 30px;*/
-        /*  padding: 0 10px;*/
-        /*  font-size: 16px;*/
-          /*box-sizing: border-box;*/
-        /*}*/
-        
-        /* Text input */
-        /*input[type='text'] {*/
-        /*  width: 250px;*/
-        /*  height: 30px;*/
-        /*  padding: 0 10px;*/
-        /*  font-size: 16px;*/
-        /*  box-sizing: border-box;*/
-        /*}*/
         
         /* Number input */
         input[type='number'] {
@@ -89,7 +62,7 @@
         }
         
         .table_deg {
-            width: 1000px;
+            width: 1200px;
             text-align: center;
             margin: left;
             margin-top: 10px;
@@ -100,7 +73,7 @@
           background-color: darkcyan;
           border: 1px solid skyblue;
           padding: 6px;
-          font-size: 16px;
+          font-size: 12px;
           font-weight: bold;
           color: white;
         }
@@ -108,7 +81,7 @@
         td {
           border: 1px solid skyblue;
           padding: 8px;
-          font-size: 14px;
+          font-size: 12px;
           color: white;
         }
         
@@ -206,7 +179,7 @@
                         @foreach ($data as $index => $vouchers)
                         <tr>
                             <td> {{ (int) $index + 1 }} </td>
-                            <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d-M-y') }} </td>
+                            <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d M') }} </td>
                             <td> {{$vouchers->voucherPrefix}} </td>
                             
                             <td class="left"> {{$vouchers->crAcTitle}} </td>
@@ -238,13 +211,24 @@
         </div>
 
     <script>
-      // Set current date in the date input field
-      const now = new Date();
-      const day = String(now.getDate()).padStart(2, '0');
-      const month = String(now.getMonth() + 1).padStart(2, '0'); 
-      const year = now.getFullYear();
-      const currentDate = `${year}-${month}-${day}`;
-      document.getElementById('dateInput').value = currentDate;
+        // Set current date in the date input field
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0'); 
+        const year = now.getFullYear();
+        const currentDate = `${year}-${month}-${day}`;
+      
+        document.getElementById('dateInput').value = currentDate;
+      
+        const creditSR = document.getElementById('creditSR');
+        const debitSR = document.getElementById('debitSR');
+        
+        const credit = document.getElementById('credit');
+        const debitS = document.getElementById('debit');
+        
+        creditSR.addEventListener('input', function() {debitSR.value = creditSR.value; });  // Set debit value to the same as credit value
+        credit.addEventListener('input', function() {debit.value = credit.value; });        // Set debit value to the same as credit value
+      
     </script>
 
 @endsection

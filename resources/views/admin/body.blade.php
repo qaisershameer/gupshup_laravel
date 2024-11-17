@@ -14,7 +14,7 @@
           <div class="title">
             <div class="icon"><i class="icon-user-1"></i></div><strong>Total Accounts</strong>
           </div>
-          <div class="number dashtext-1">{{$sum_Accounts}}</div>
+          <div class="number dashtext-1"><a href="{{ url('accounts') }}">{{$sum_Accounts}}</a></div>
         </div>
         <div class="progress progress-template">
           <div role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-1"></div>
@@ -27,7 +27,7 @@
           <div class="title">
             <div class="icon"><i class="icon-contract"></i></div><strong>Total Receipts</strong>
           </div>
-          <div class="number dashtext-2">{{$sum_CR}}</div>
+          <div class="number dashtext-2"><a href="{{ url('crv') }}">{{$sum_CR}}</a></div>
         </div>
         <div class="progress progress-template">
           <div role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-2"></div>
@@ -40,7 +40,7 @@
           <div class="title">
             <div class="icon"><i class="icon-paper-and-pencil"></i></div><strong>Total Payments</strong>
           </div>
-          <div class="number dashtext-3">{{$sum_CP}}</div>
+          <div class="number dashtext-3"><a href="{{ url('cpv') }}">{{$sum_CP}}</a></div>
         </div>
         <div class="progress progress-template">
           <div role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-3"></div>
@@ -53,7 +53,7 @@
           <div class="title">
             <div class="icon"><i class="icon-writing-whiteboard"></i></div><strong>Total JV</strong>
           </div>
-          <div class="number dashtext-4">{{$sum_JV}}</div>
+          <div class="number dashtext-4"><a href="{{ url('jv') }}">{{$sum_JV}}</a></div>
         </div>
         <div class="progress progress-template">
           <div role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-4"></div>

@@ -39,10 +39,13 @@ class HomeController extends Controller
     {
         if(Auth()->user()->usertype == 'admin')
         {
-            $sum_Accounts = Accounts::all()->count();
-            $sum_CR = Vouchers::where('voucherPrefix','=','CR')->count();
-            $sum_CP = Vouchers::where('voucherPrefix','=','CP')->count();
-            $sum_JV = Vouchers::where('voucherPrefix','=','JV')->count();
+
+            $uId = Auth::id(); // Get the currently authenticated user's ID
+        
+            $sum_Accounts = Accounts::where('uId', $uId)->get()->count();
+            $sum_CR = Vouchers::where('uId', $uId)->where('voucherPrefix','=','CR')->count();
+            $sum_CP = Vouchers::where('uId', $uId)->where('voucherPrefix','=','CP')->count();
+            $sum_JV = Vouchers::where('uId', $uId)->where('voucherPrefix','=','JV')->count();
             $total_order = Order::all()->count();
             $total_delivered = Order::where('delivery_status','=','Delivered')->count();
             return view('admin.body', compact('sum_Accounts', 'sum_CR', 'sum_CP', 'sum_JV'));             

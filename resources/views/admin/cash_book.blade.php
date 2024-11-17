@@ -27,7 +27,7 @@
         }
 
         .table_deg {
-            width: 1000px;
+            width: 1200px;
             text-align: center;
             margin: left;
             margin-top: 10px;
@@ -72,7 +72,7 @@
           background-color: darkcyan;
           border: 1px solid skyblue;
           padding: 6px;
-          font-size: 16px;
+          font-size: 12px;
           font-weight: bold;
           color: white;
         }
@@ -80,7 +80,7 @@
         td {
           border: 1px solid skyblue;
           padding: 8px;
-          font-size: 14px;
+          font-size: 12px;
           color: white;
         }
         
@@ -156,7 +156,7 @@
                     @foreach ($data as $index => $vouchers)
                     <tr>
                         <td> {{ (int) $index + 1 }} </td>
-                        <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d-M-y') }} </td>
+                        <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d M') }} </td>
                         <td> {{$vouchers->voucherPrefix}} </td>
                         
                         <td class="left"> {{$vouchers->remarks}} </td>
