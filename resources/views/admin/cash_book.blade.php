@@ -27,11 +27,12 @@
         }
 
         .table_deg {
-            width: 1200px;
+            width: 100%;
             text-align: center;
             margin: left;
             margin-top: 10px;
             border: 2px solid yellowgreen;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .sar-th {
@@ -87,9 +88,10 @@
     </style>
     
     <div class="container-fluid">
-                <h3 style="color:white;">Cash Book Report</h3>
+        
+        <h3 style="color:white;">Cash Book Report</h3>
 
-                <div class="div_deg">
+        <div class="div_deg">
 
                     <!--Form to view cash_book -->
                     <form action="{{url('cash_book')}}" method="post">
@@ -108,12 +110,12 @@
 
                     </form>
                     
-                </div>
+                
+        </div>
               
-              <div>    
-    
-                <!-- Table for displaying voucher data -->
-                <table class="table_deg">
+        <div class="div_deg table-responsive">  <!-- Added Bootstrap responsive table class -->
+            <!-- Table for displaying voucher data -->
+            <table class="table_deg">
                     <thead>
                         <tr>
                             <th>Sr.</th>
@@ -204,8 +206,9 @@
                     
                   </tbody>
                 </table>
-            </div>
         </div>
+            
+    </div>
 
     <script>
       // Set current date in the date input field

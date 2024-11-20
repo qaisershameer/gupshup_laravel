@@ -611,10 +611,8 @@ class AdminController extends Controller
     {
 
         // Check if user is authenticated
-        if (!Auth::check()) {
-            return redirect()->route('login'); // or handle accordingly
+        if (!Auth::check()) {return redirect()->route('login'); // or handle accordingly
         }
-
         $uId = Auth::id(); // Get the currently authenticated user's ID
 
         $data = new Accounts;
@@ -634,15 +632,20 @@ class AdminController extends Controller
     }
 
     public function edit_account($id)
-    {        
+    {
+        // Check if user is authenticated
+        if (!Auth::check()) {return redirect()->route('login'); // or handle accordingly
+        }
+        $uId = Auth::id(); // Get the currently authenticated user's ID
+        
 
-        $accType = AccType::orderBy('accTypeId')->get();
+        $accType = AccType::where('uId', $uId)->orderBy('accTypeId')->get();
 
-        $accParent = AccParent::orderBy('accParentTitle')->get();
+        $accParent = AccParent::where('uId', $uId)->orderBy('accParentTitle')->get();
 
-        $area = Area::orderBy('areaTitle')->get();
+        $area = Area::where('uId', $uId)->orderBy('areaTitle')->get();
 
-        $currency = Currency::orderBy('currencyTitle')->get();
+        $currency = Currency::where('uId', $uId)->orderBy('currencyTitle')->get();
 
         $data = DB::table('accounts')
                         ->select(
@@ -945,7 +948,7 @@ class AdminController extends Controller
                         ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
                         ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
                         ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
-                        ->where('vouchers.voucherId', $uId)
+                        ->where('vouchers.voucherId', $id)
                         // ->orderBy('accounts.acTitle')
                         ->first(); // get();
         
@@ -1213,97 +1216,171 @@ class AdminController extends Controller
     public function trail_balance(Request $request)
     {
         // Check if user is authenticated
-        if (!Auth::check()) {return redirect()->route('login');}
+        if (!Auth::check()) { return redirect()->route('login'); }
         
         $uId = Auth::id(); // Get the currently authenticated user's ID
         
-        $accounts = Accounts::where('uId', $uId)->where('uId', $uId)->orderBy('acTitle')->get();
+        // Get the accounts for the user
+        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
+        $accType = AccType::where('uId', $uId)->orderBy('accTypeId')->get();
+        $accParent = AccParent::where('uId', $uId)->orderBy('accParentTitle')->get();
+        $area = Area::where('uId', $uId)->orderBy('areaTitle')->get();
+        $currency = Currency::where('uId', $uId)->orderBy('currencyTitle')->get();        
+
+        $accTypeId = isset($request->accTypeId) ? $request->accTypeId : 'ALL';
+        $areaId = isset($request->areaId) ? $request->areaId : 'ALL';
+        
+        // $parentId = isset($request->parentId) ? $request->parentId : 'ALL';
+        // $currencyId = isset($request->currencyId) ? $request->currencyId : 'ALL';
+        
+        // $accTypeId = $request->accTypeId ?? 'ALL';
+        // $areaId = $request->areaId ?? 'ALL';
     
+        // Parse date from request and format them
         $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
         $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
-    
-        // Debit query with COALESCE to replace null acId
-        $debits = Vouchers::select(
-                    DB::raw('COALESCE(drAcId, 0) AS acId'), 
-                    'accounts.acTitle',
-                    'acctype.accTypeTitle',
-                    DB::raw('SUM(debit) AS debit'),
-                    DB::raw('SUM(debitSR) AS debitSR'),
-                    DB::raw('0 AS credit'),
-                    DB::raw('0 AS creditSR')
-                  )
-                ->leftJoin('accounts', 'vouchers.drAcId', '=', 'accounts.acId')
-                ->leftJoin('acctype AS acctype', 'accounts.accTypeId', '=', 'acctype.accTypeId')
-                ->where('vouchers.uId', $uId)
-                ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
-                ->groupBy('drAcId', 'accounts.acTitle', 'acctype.accTypeTitle')
-                ->orderBy('accounts.acTitle', 'desc');
         
-        // Credit query with COALESCE to replace null acId
-        $credits = Vouchers::select(
-                    DB::raw('COALESCE(crAcId, 0) AS acId'),
-                    'accounts.acTitle',
-                    'acctype.accTypeTitle',
-                    DB::raw('0 AS debit'),
-                    DB::raw('0 AS debitSR'),
-                    DB::raw('SUM(credit) AS credit'),
-                    DB::raw('SUM(creditSR) AS creditSR')
-                )
-                ->leftJoin('accounts', 'vouchers.crAcId', '=', 'accounts.acId')
-                ->leftJoin('acctype', 'accounts.accTypeId', '=', 'acctype.accTypeId')
-                ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
-                ->where('vouchers.uId', $uId)
-                ->groupBy('crAcId', 'accounts.acTitle', 'acctype.accTypeTitle')
-                ->orderBy('accounts.acTitle', 'desc');
-    
-        // Get results for debits and credits
-        $debitResults = $debits->get();
-        $creditResults = $credits->get();
-    
-        // Filter out null acId values before merging
-        $debitResults = $debitResults->filter(function ($item) {
-            return !is_null($item->acId);
-        });
-    
-        $creditResults = $creditResults->filter(function ($item) {
-            return !is_null($item->acId);
-        });
-    
-        // Merge the results
-        $mergedResults = $debitResults->merge($creditResults);
-    
-        // Group by acId
-        $groupedResults = $mergedResults->groupBy('acId');
-    
-        // Sort the results by acTitle
-        $sortedResults = $groupedResults->sortBy(function ($item) {
-            return $item->first()->acTitle;
-        });
-    
-        $data = [];
-        // Prepare final data
-        $data =  $sortedResults->map(function ($items, $key) {
-            if ($items->isEmpty()) {
-                return null; // Skip empty groups
-            }
-            return (object) [
-                'acId' => $key,
-                'acTitle' => $items->first()->acTitle,
-                'accTypeTitle' => $items->first()->accTypeTitle,
-                'debit' => $items->sum('debit'),
-                'credit' => $items->sum('credit'),
-                'debitSR' => $items->sum('debitSR'),
-                'creditSR' => $items->sum('creditSR'),
-            ];
-        })->filter(); // Remove null values
+        // $query = DB::table(DB::raw("( 
+        //     SELECT
+        //         COALESCE(vouchers.drAcId, 0) AS acId,
+        //         accounts.acTitle,
+        //         accounts.accTypeId,
+        //         acctype.accTypeTitle,
+        //         accounts.areaId,
+        //         area.areaTitle,
+        //         SUM(vouchers.debit) AS debit,
+        //         SUM(vouchers.debitSR) AS debitSR,
+        //         0 AS totalCredit,
+        //         0 AS totalCreditSR
+        //     FROM
+        //         vouchers
+        //     LEFT JOIN accounts ON vouchers.drAcId = accounts.acId
+        //     LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
+        //     LEFT JOIN area ON accounts.areaId = area.areaId
+        //     WHERE
+        //         vouchers.uId = :uId AND vouchers.voucherDate BETWEEN :datefrom AND :dateto
+        //     GROUP BY
+        //         vouchers.drAcId,
+        //         accounts.acTitle,
+        //         accounts.accTypeId,
+        //         acctype.accTypeTitle,
+        //         accounts.areaId,
+        //         area.areaTitle
 
+        // // Prepare the initial bindings
+        // $bindings = [
+        //     'uId' => $uId,
+        //     'datefrom' => $datefrom,
+        //     'dateto' => $dateto
+        // ];
+
+        // if ($accTypeId !== 'ALL') {
+        //     $query->where('accTypeId', $accTypeId);
+        //     $bindings['accTypeId'] = $accTypeId;
+        // } else {
+        //     $query->where(function($query) {
+        //         $query->whereNotNull('accTypeId');
+        //     });
+        // }
         
-        // dd($datefrom, $dateto, $debits->toSql(), $credits->toSql(), $data);
-        // dd($debits, $credits);
-        // dd($sortedResults);
-        // dd( $data);
-    
-        return view('admin.trail_balance', compact('data', 'accounts', 'datefrom', 'dateto'));
+        // Now execute the query and pass the bindings to it
+        // $data = DB::select($query->toSql(), $bindings);
+
+        $query = DB::table(DB::raw("( 
+            SELECT
+                COALESCE(vouchers.drAcId, 0) AS acId,
+                accounts.acTitle,
+                accounts.accTypeId,
+                acctype.accTypeTitle,
+                accounts.areaId,
+                area.areaTitle,          
+                SUM(vouchers.debit) AS debit,
+                SUM(vouchers.debitSR) AS debitSR,
+                0 AS credit,
+                0 AS creditSR
+            FROM
+                vouchers
+            LEFT JOIN accounts ON vouchers.drAcId = accounts.acId
+            LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
+            LEFT JOIN area ON accounts.areaId = area.areaId
+            WHERE
+                vouchers.uId = ? AND vouchers.voucherDate BETWEEN ? AND ?
+            GROUP BY
+                vouchers.drAcId,
+                accounts.acTitle,
+                accounts.accTypeId,
+                acctype.accTypeTitle,
+                accounts.areaId,
+                area.areaTitle     
+            UNION ALL
+            SELECT
+                COALESCE(vouchers.crAcId, 0) AS acId,
+                accounts.acTitle,
+                accounts.accTypeId,
+                acctype.accTypeTitle,
+                accounts.areaId,
+                area.areaTitle,          
+                
+                0 AS debit,
+                0 AS debitSR,
+                SUM(vouchers.credit) AS credit,
+                SUM(vouchers.creditSR) AS creditSR
+            FROM
+                vouchers
+            LEFT JOIN accounts ON vouchers.crAcId = accounts.acId
+            LEFT JOIN acctype ON accounts.accTypeId = acctype.accTypeId
+            LEFT JOIN area ON accounts.areaId = area.areaId
+            WHERE
+                vouchers.uId = ? AND vouchers.voucherDate BETWEEN ? AND ?
+            GROUP BY
+                vouchers.crAcId,
+                accounts.acTitle,
+                accounts.accTypeId,
+                acctype.accTypeTitle,
+                accounts.areaId,
+                area.areaTitle
+        ) AS combined"))
+        ->select(
+            'acId',
+            'acTitle',
+            'accTypeId',
+            'accTypeTitle',
+            'areaId',
+            'areaTitle',
+            DB::raw('SUM(debit) AS debit'),
+            DB::raw('SUM(debitSR) AS debitSR'),
+            DB::raw('SUM(credit) AS credit'),
+            DB::raw('SUM(creditSR) AS creditSR')
+        )
+        ->groupBy('acId', 'acTitle', 'accTypeTitle', 'accTypeId', 'accTypeTitle', 'areaId', 'areaTitle')
+        ->having('acId', '<>', 0)
+        ->orderBy('acTitle');
+        
+        // Conditionally add the accTypeId filter
+        $bindings = [$uId, $datefrom, $dateto, $uId, $datefrom, $dateto];
+        
+        if ($accTypeId !== 'ALL') {
+            $query->where('accTypeId', $accTypeId);
+            $bindings[] = $accTypeId; // Add accTypeId to bindings
+        } else {
+            $query->whereNotNull('accTypeId');
+        }
+
+        if ($areaId !== 'ALL') {
+            $query->where('areaId', $areaId);
+            $bindings[] = $areaId; // Add areaId to bindings
+        } else {
+            $query->whereNotNull('areaId');
+        }        
+        
+        $query->setBindings($bindings);
+        
+        $data = $query->get();
+
+        // Return the results to the view
+        return view('admin.trail_balance', compact('data', 'accounts', 'accType', 'accTypeId', 'accParent', 'area', 'areaId', 'currency', 'datefrom', 'dateto'));
     }
+
+
 
 }

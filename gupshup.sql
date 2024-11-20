@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 18, 2024 at 07:01 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: 127.0.0.1:3306
+-- Generation Time: Nov 20, 2024 at 12:07 PM
+-- Server version: 10.11.10-MariaDB
+-- PHP Version: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `gupshup`
+-- Database: `u751370114_gupshup`
 --
 
 -- --------------------------------------------------------
@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `accounts` (
   `acId` bigint(20) UNSIGNED NOT NULL,
-  `acTitle` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `mobile` varchar(255) DEFAULT NULL,
+  `acTitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mobile` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `openingBal` double NOT NULL DEFAULT 0,
   `CurrentBal` double NOT NULL DEFAULT 0,
   `uId` bigint(20) UNSIGNED NOT NULL,
@@ -41,21 +41,7 @@ CREATE TABLE `accounts` (
   `areaId` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `accounts`
---
-
-INSERT INTO `accounts` (`acId`, `acTitle`, `email`, `mobile`, `openingBal`, `CurrentBal`, `uId`, `currencyId`, `accTypeId`, `parentId`, `areaId`, `created_at`, `updated_at`) VALUES
-(1, 'Mustafa', NULL, NULL, 0, 0, 1, 1, 1, 1, 1, '2024-11-12 01:42:38', '2024-11-12 01:42:38'),
-(2, 'Burhan', NULL, NULL, 0, 0, 1, 2, 3, 3, 3, '2024-11-14 01:45:21', '2024-11-14 01:45:21'),
-(3, 'Farhand', NULL, NULL, 0, 0, 1, 4, 2, 2, 4, '2024-11-14 01:45:41', '2024-11-14 01:45:41'),
-(4, 'Muzamil', NULL, NULL, 0, 0, 1, 4, 3, 3, 2, '2024-11-14 01:46:09', '2024-11-14 01:46:09'),
-(5, 'Raees', NULL, NULL, 0, 0, 1, 3, 5, 5, 5, '2024-11-14 01:46:30', '2024-11-14 01:46:30'),
-(6, 'Qaiser', NULL, NULL, 0, 0, 1, 3, 4, 4, 1, '2024-11-14 01:47:00', '2024-11-14 01:47:00'),
-(7, 'Salaman BUTT', 'salamanbutt@gmail.com', '+923346013608', 0, 0, 1, 2, 9, 1, 6, '2024-11-16 02:34:37', '2024-11-16 02:34:37'),
-(8, 'Noor SB', 'noorsb@gmail.com', '+923346013608', 0, 0, 1, 1, 1, 1, 3, '2024-11-16 02:37:52', '2024-11-16 02:37:52');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -72,18 +58,6 @@ CREATE TABLE `accparent` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `accparent`
---
-
-INSERT INTO `accparent` (`parentId`, `accParentTitle`, `accTypeId`, `uId`, `created_at`, `updated_at`) VALUES
-(1, 'CASH & BANKS', 1, 1, '2024-11-12 01:42:07', '2024-11-14 01:42:46'),
-(2, 'PARTIES', 2, 1, '2024-11-14 01:42:53', '2024-11-14 01:42:53'),
-(3, 'VENDORS', 3, 1, '2024-11-14 01:43:01', '2024-11-14 01:43:01'),
-(4, 'CAPITAL & DRAWINGS', 4, 1, '2024-11-14 01:43:16', '2024-11-14 01:43:16'),
-(5, 'SALES & CGS', 5, 1, '2024-11-14 01:43:41', '2024-11-14 01:43:41'),
-(6, 'ADMIN EXPENSES', 6, 1, '2024-11-14 01:43:50', '2024-11-14 01:43:50');
-
 -- --------------------------------------------------------
 
 --
@@ -98,19 +72,6 @@ CREATE TABLE `acctype` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `acctype`
---
-
-INSERT INTO `acctype` (`accTypeId`, `accTypeTitle`, `uId`, `created_at`, `updated_at`) VALUES
-(1, 'BANK', 1, '2024-11-12 01:41:45', '2024-11-16 01:47:09'),
-(2, 'CUSTOMER', 1, '2024-11-14 01:41:26', '2024-11-14 01:41:31'),
-(3, 'SUPPLIER', 1, '2024-11-14 01:41:38', '2024-11-14 01:41:38'),
-(4, 'CAPITAL', 1, '2024-11-14 01:42:10', '2024-11-14 01:42:10'),
-(5, 'REVENUE', 1, '2024-11-14 01:42:16', '2024-11-14 01:42:16'),
-(6, 'EXPENSE', 1, '2024-11-14 01:42:19', '2024-11-14 01:42:19'),
-(9, 'Admin Expense', 1, '2024-11-16 02:09:12', '2024-11-16 02:09:27');
-
 -- --------------------------------------------------------
 
 --
@@ -124,18 +85,6 @@ CREATE TABLE `area` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `area`
---
-
-INSERT INTO `area` (`areaId`, `areaTitle`, `uId`, `created_at`, `updated_at`) VALUES
-(1, 'MULTAN', 1, '2024-11-12 01:41:13', '2024-11-12 01:41:13'),
-(2, 'LAHORE', 1, '2024-11-14 01:44:38', '2024-11-14 01:44:38'),
-(3, 'ISLAMABAD', 1, '2024-11-14 01:44:43', '2024-11-14 01:44:43'),
-(4, 'KARACHI', 1, '2024-11-14 01:44:47', '2024-11-14 01:44:47'),
-(5, 'RAWALPINDI 2', 1, '2024-11-14 01:44:53', '2024-11-16 02:16:21'),
-(6, 'RAWALPINDI', 1, '2024-11-16 02:16:33', '2024-11-16 02:16:33');
 
 -- --------------------------------------------------------
 
@@ -166,16 +115,6 @@ CREATE TABLE `cache` (
   `value` mediumtext NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `cache`
---
-
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('c525a5357e97fef8d3db25841c86da1a', 'i:1;', 1731567339),
-('c525a5357e97fef8d3db25841c86da1a:timer', 'i:1731567339;', 1731567339),
-('e10fd735ad88f21f45ee9e47870c152d', 'i:1;', 1731479321),
-('e10fd735ad88f21f45ee9e47870c152d:timer', 'i:1731479321;', 1731479321);
 
 -- --------------------------------------------------------
 
@@ -221,16 +160,6 @@ CREATE TABLE `currency` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `currency`
---
-
-INSERT INTO `currency` (`currencyId`, `currencyTitle`, `uId`, `created_at`, `updated_at`) VALUES
-(1, 'PKR', 1, '2024-11-12 01:40:44', '2024-11-12 01:40:44'),
-(2, 'SAR', 1, '2024-11-14 01:40:55', '2024-11-14 01:40:55'),
-(3, 'USD', 1, '2024-11-14 01:40:58', '2024-11-14 01:40:58'),
-(4, 'UAE', 1, '2024-11-14 01:41:02', '2024-11-14 01:41:02');
-
 -- --------------------------------------------------------
 
 --
@@ -262,6 +191,15 @@ CREATE TABLE `food` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `food`
+--
+
+INSERT INTO `food` (`id`, `title`, `detail`, `price`, `image`, `created_at`, `updated_at`) VALUES
+(2, 'Mobile App', 'Customized Flutter-Dart Android Base Mobile App', 100000, '1731556734.png', '2024-11-13 22:09:07', '2024-11-14 04:02:19'),
+(3, 'Web Laravel App', 'Customized Web Base Laraval-MySQL Live App', 75000, '1731556745.png', '2024-11-13 22:09:07', '2024-11-14 04:02:43'),
+(4, 'Desktop App', 'Customized Desktop Windows-SQL Server Offline App', 50000, '1731556754.png', '2024-11-13 22:09:07', '2024-11-14 04:03:18');
 
 -- --------------------------------------------------------
 
@@ -325,12 +263,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (8, '2024_09_26_064659_create_accParent_table', 1),
 (9, '2024_09_26_064710_create_accounts_table', 1),
 (10, '2024_09_26_064726_create_vouchers_table', 1),
-(11, '2024_10_09_160153_add_two_factor_columns_to_users_table', 1),
-(12, '2024_10_10_153823_create_food_table', 1),
-(13, '2024_10_16_171949_create_carts_table', 1),
-(14, '2024_10_16_181215_add_userid_field_to_carts', 1),
-(15, '2024_10_18_154219_create_orders_table', 1),
-(16, '2024_10_25_031747_create_books_table', 1);
+(11, '2024_10_09_160153_add_two_factor_columns_to_users_table', 2),
+(12, '2024_10_10_153823_create_food_table', 3),
+(13, '2024_10_16_171949_create_carts_table', 3),
+(14, '2024_10_16_181215_add_userid_field_to_carts', 3),
+(15, '2024_10_18_154219_create_orders_table', 3),
+(16, '2024_10_25_031747_create_books_table', 3);
 
 -- --------------------------------------------------------
 
@@ -384,14 +322,6 @@ CREATE TABLE `personal_access_tokens` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `personal_access_tokens`
---
-
-INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
-(2, 'App\\Models\\User', 2, 'API Token', '8c6cdda9f1ed34009a3dfd9ba3ef28ab4db024d3adfbeda57391b231f42cb0c6', '[\"*\"]', NULL, NULL, '2024-11-16 01:42:49', '2024-11-16 01:42:49'),
-(3, 'App\\Models\\User', 1, 'API Token', '7866cf43595e973978eb7c49a0cd64dbf94004dadba25b3a31c1891bea6a34f8', '[\"*\"]', '2024-11-16 04:04:44', NULL, '2024-11-16 01:43:29', '2024-11-16 04:04:44');
-
 -- --------------------------------------------------------
 
 --
@@ -417,7 +347,7 @@ CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `usertype` varchar(255) NOT NULL DEFAULT 'user',
+  `usertype` varchar(25) NOT NULL DEFAULT 'user',
   `phone` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -426,8 +356,6 @@ CREATE TABLE `users` (
   `two_factor_recovery_codes` text DEFAULT NULL,
   `two_factor_confirmed_at` timestamp NULL DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
-  `current_team_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `profile_photo_path` varchar(2048) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -436,9 +364,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `usertype`, `phone`, `address`, `email_verified_at`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `current_team_id`, `profile_photo_path`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@gmail.com', 'admin', '+923346013608', 'Moza Wan Chattah', NULL, '$2y$12$7W1r0rwebfloKOYJvtzZdObM9EdhF96wMRhzmL1Ra.L7m9UQHMUq2', NULL, NULL, NULL, 'MbzSEHEfgv8VjH1O1B1GI8DRXXLbSG066ogTsU60V75oq12D3U3lMBfj7OOt', NULL, NULL, '2024-11-12 01:40:13', '2024-11-12 01:40:13'),
-(2, 'user1', 'user1@gmail.com', 'user', '+923346013608', 'Moza Wan Chattah', NULL, '$2y$12$lIdweM8XLVfIlY3106WoZ.p8cXPLhiLRTCPxA8a1n36x04/WBt1pK', NULL, NULL, NULL, NULL, NULL, NULL, '2024-11-13 01:26:33', '2024-11-13 01:26:33');
+INSERT INTO `users` (`id`, `name`, `email`, `usertype`, `phone`, `address`, `email_verified_at`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'qrd', 'qrdevteam@gmail.com', 'admin', '+923346013608', 'Multan Punjab Pakistan', NULL, '$2y$12$3Op6OuYk5bEGIZ7wqp8An.dJQ/vKW8nFpSTV69zHcnWWryno.8ZDS', NULL, NULL, NULL, 'QlfrvayQebcIAMD6zFizl0R8D5GTzeNe7VKUWIhaeiTGWhy6heoD4vuFBlAM', '2024-11-08 05:36:21', '2024-11-08 05:36:21'),
+(2, 'admin', 'admin@gmail.com', 'admin', '+923346013608', 'Makkah Saudi Arabia', NULL, '$2y$12$3Op6OuYk5bEGIZ7wqp8An.dJQ/vKW8nFpSTV69zHcnWWryno.8ZDS', NULL, NULL, NULL, 'uqKvWYTGKaesdclFz8yz3T7ap5doCtHSVUZmNE5vhat4wu8kkptDMjbUcDLg', '2024-11-08 17:49:11', '2024-11-08 17:49:11'),
+(3, 'user1', 'user1@gmail.com', 'admin', '+923346013608', 'Multan Punjab Pakistan', NULL, '$2y$12$3Op6OuYk5bEGIZ7wqp8An.dJQ/vKW8nFpSTV69zHcnWWryno.8ZDS', NULL, NULL, NULL, NULL, '2024-11-15 01:47:44', '2024-11-15 01:47:44');
 
 -- --------------------------------------------------------
 
@@ -463,24 +392,6 @@ CREATE TABLE `vouchers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `vouchers`
---
-
-INSERT INTO `vouchers` (`voucherId`, `voucherDate`, `voucherPrefix`, `remarks`, `drAcId`, `crAcId`, `debit`, `credit`, `debitSR`, `creditSR`, `uId`, `created_at`, `updated_at`) VALUES
-(1, '2024-11-14', 'CR', 'Cash Received.', NULL, 6, 0, 1000, 0, 100, 1, '2024-11-12 01:43:32', '2024-11-14 01:55:18'),
-(2, '2024-11-14', 'CR', 'Cash Received.', NULL, 4, 0, 2000, 0, 200, 1, '2024-11-12 01:45:26', '2024-11-14 02:00:22'),
-(3, '2024-11-14', 'CP', 'Cash Paid.', 3, NULL, 300, 0, 30, 0, 1, '2024-11-12 01:48:38', '2024-11-14 02:02:09'),
-(4, '2024-11-14', 'CP', 'Cash Paid.', 2, NULL, 200, 0, 20, 0, 1, '2024-11-14 02:00:47', '2024-11-14 02:00:47'),
-(5, '2024-11-14', 'JV', 'Amount Transfered.', 5, 6, 400, 400, 40, 40, 1, '2024-11-14 02:01:43', '2024-11-14 02:01:43'),
-(6, '2024-11-14', 'CP', 'Cash Paid.', 1, NULL, 400, 0, 40, 0, 1, '2024-11-14 02:05:36', '2024-11-14 02:05:51'),
-(7, '2024-11-14', 'CR', 'Cash Received.', NULL, 1, 0, 100, 0, 10, 1, '2024-11-14 02:07:14', '2024-11-14 02:07:14'),
-(8, '2024-11-14', 'JV', 'Amount Transfered.', 2, 1, 200, 200, 20, 20, 1, '2024-11-14 02:07:55', '2024-11-14 02:07:55'),
-(9, '2024-11-14', 'JV', 'Amount Transfered.', 1, 5, 600, 600, 60, 60, 1, '2024-11-14 02:08:14', '2024-11-14 02:08:14'),
-(10, '2024-11-16', 'CR', 'Cash Received.', NULL, 1, 0, 50, 0, 5, 1, '2024-11-16 01:48:06', '2024-11-16 01:48:06'),
-(11, '2024-11-16', 'CP', 'Cash Paid.', 6, NULL, 40, 0, 4, 0, 1, '2024-11-16 01:54:53', '2024-11-16 01:54:53'),
-(12, '2024-11-16', 'JV', 'Amount Transferred.', 2, 3, 50, 50, 5, 5, 1, '2024-11-16 02:03:35', '2024-11-16 02:03:35');
-
---
 -- Indexes for dumped tables
 --
 
@@ -488,12 +399,7 @@ INSERT INTO `vouchers` (`voucherId`, `voucherDate`, `voucherPrefix`, `remarks`, 
 -- Indexes for table `accounts`
 --
 ALTER TABLE `accounts`
-  ADD PRIMARY KEY (`acId`),
-  ADD KEY `accounts_uid_foreign` (`uId`),
-  ADD KEY `accounts_currencyid_foreign` (`currencyId`),
-  ADD KEY `accounts_acctypeid_foreign` (`accTypeId`),
-  ADD KEY `accounts_parentid_foreign` (`parentId`),
-  ADD KEY `accounts_areaid_foreign` (`areaId`);
+  ADD PRIMARY KEY (`acId`);
 
 --
 -- Indexes for table `accparent`
@@ -632,25 +538,25 @@ ALTER TABLE `vouchers`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `acId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `acId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `accparent`
 --
 ALTER TABLE `accparent`
-  MODIFY `parentId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `parentId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `acctype`
 --
 ALTER TABLE `acctype`
-  MODIFY `accTypeId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `accTypeId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `area`
 --
 ALTER TABLE `area`
-  MODIFY `areaId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `areaId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `books`
@@ -668,7 +574,7 @@ ALTER TABLE `carts`
 -- AUTO_INCREMENT for table `currency`
 --
 ALTER TABLE `currency`
-  MODIFY `currencyId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `currencyId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -680,7 +586,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `food`
 --
 ALTER TABLE `food`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -704,33 +610,23 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `vouchers`
 --
 ALTER TABLE `vouchers`
-  MODIFY `voucherId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `voucherId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `accounts`
---
-ALTER TABLE `accounts`
-  ADD CONSTRAINT `accounts_acctypeid_foreign` FOREIGN KEY (`accTypeId`) REFERENCES `acctype` (`accTypeId`),
-  ADD CONSTRAINT `accounts_areaid_foreign` FOREIGN KEY (`areaId`) REFERENCES `area` (`areaId`),
-  ADD CONSTRAINT `accounts_currencyid_foreign` FOREIGN KEY (`currencyId`) REFERENCES `currency` (`currencyId`),
-  ADD CONSTRAINT `accounts_parentid_foreign` FOREIGN KEY (`parentId`) REFERENCES `accparent` (`parentId`),
-  ADD CONSTRAINT `accounts_uid_foreign` FOREIGN KEY (`uId`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `accparent`

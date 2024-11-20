@@ -13,8 +13,8 @@
     
         .div_deg {
             display: flex;
-            justify-content: left;
             align-items: left;
+            justify-content: left;
         }
     
         .sar-th {
@@ -54,28 +54,27 @@
         .table_deg {
             width: 100%;  /* Set to 100% for responsiveness */
             text-align: center;
-            margin-top: 20px; /* Added top margin here */
+            margin-top: 10px;
             border: 2px solid yellowgreen;
-            border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }        
     
         th {
             background-color: darkcyan;
             border: 1px solid skyblue;
             padding: 6px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             color: white;
         }
     
         td {
-            border: 1px solid skyblue;
-            padding: 8px;
+            padding: 6px;
             font-size: 14px;
             color: white;
+            border: 1px solid skyblue;
         }
+        
     </style>
 
     <div class="container-fluid">
@@ -119,12 +118,12 @@
             </form>
         </div>              
     
-        <div class="table-responsive table_deg">  <!-- Added Bootstrap responsive table class -->
-            <table class="table table-bordered">
+        <div class="div_deg table-responsive">  <!-- Added Bootstrap responsive table class -->
+            <table class="table_deg">
                 <thead>
                     <tr>
                         <th> Sr  </th>
-                        <th> ID  </th>
+                        <!--<th> ID  </th>-->
                         <th> Account Title </th>
                         <th> Type </th>
                         <th> Parent </th>
@@ -137,7 +136,7 @@
                     @foreach ($data as $index => $account)
                     <tr>
                         <td> {{ (int) $index + 1 }} </td>
-                        <td> {{$account->acId}} </td>
+                        <!--<td> {{$account->acId}} </td>-->
                         <td class="left"> {{$account->acTitle}} </td>
                         <td> {{$account->accTypeTitle}} </td>
                         <td> {{$account->accParentTitle}} </td>

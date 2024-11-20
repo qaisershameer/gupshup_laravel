@@ -46,8 +46,8 @@ class VouchersController extends BaseController
                                             ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
                                         ->where('vouchers.uId', $uId)
                                         ->where('vouchers.voucherPrefix', $voucherPrefix)
-                                        ->orderBy('vouchers.voucherDate')
-                                        ->orderBy('vouchers.updated_at')
+                                        ->orderBy('vouchers.voucherDate', 'desc')
+                                        ->orderBy('vouchers.updated_at', 'desc')                                        
                                         ->get();
             
         return $this->sendResponse($data, 'All Vouchers Data');

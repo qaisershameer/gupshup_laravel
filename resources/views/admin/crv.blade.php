@@ -62,11 +62,12 @@
         }
  
         .table_deg {
-            width: 1200px;
+            width: 100%;
             text-align: center;
             margin: left;
             margin-top: 10px;
             border: 2px solid yellowgreen;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         th {
@@ -123,9 +124,10 @@
                 </div>
             </form>
         </div>
-
-        <!-- Table for displaying voucher data -->
-        <table class="table_deg">
+        
+        <div class="div_deg table-responsive">  <!-- Added Bootstrap responsive table class -->
+            <!-- Table for displaying voucher data -->
+            <table class="table_deg">
             <tr>
                 <th> Sr. </th>
                 <th> Date </th>
@@ -156,6 +158,8 @@
             </tr>
             @endforeach
         </table>
+        </div>
+        
     </div>
 
     <script>

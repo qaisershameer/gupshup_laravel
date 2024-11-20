@@ -61,11 +61,12 @@
         }
  
         .table_deg {
-            width: 1200px;
+            width: 100%;
             text-align: center;
             margin: left;
             margin-top: 10px;
             border: 2px solid yellowgreen;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         th {
@@ -122,41 +123,44 @@
                     </form>
                 </div>
 
-                <!-- Table for displaying voucher data -->
-                <table class="table_deg">
-                    <tr>
-                        <th> Sr. </th>
-                        <th> Date </th>
-                        <th> VC </th>
-                        <th> Account </th>
-                        <th> Remarks </th>
-                        
-                        <th class="sar-th"> SAR </th>
-                        <th class=" pkr-th"> PKR </th>
-                        <th> Action </th>
-                    </tr>
-
-                    @foreach ($data as $index => $vouchers)
-                    <tr>
-                        <td> {{ (int) $index + 1 }} </td>
-                        <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d M') }} </td>
-                        <td> {{$vouchers->voucherPrefix}} </td>
-                        <td class="left"> {{$vouchers->drAcTitle}} </td>
-                        <td class="left"> {{$vouchers->remarks}} </td>
-                        
-                        <td class="right">{!! $vouchers->debitSR == 0 ? '&nbsp;' : number_format($vouchers->debitSR, 0, '.', ',') !!}</td>
-                        <td class="right">{!! $vouchers->debit == 0 ? '&nbsp;' : number_format($vouchers->debit, 2, '.', ',') !!}</td>
-                        <td>
-                            <a class="btn btn-success" href="{{url('edit_cpv', $vouchers->voucherId)}}">
-                                <i class="fas fa-pencil-alt"></i>
-                            </a>
-                            <a class="btn btn-danger" onclick="confirmation(event)" href="{{url('delete_voucher', $vouchers->voucherId)}}">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                        </td>                        
-                    </tr>
-                    @endforeach
-                </table>
+                <div class="div_deg table-responsive">  <!-- Added Bootstrap responsive table class -->
+                    <!-- Table for displaying voucher data -->
+                    <table class="table_deg">
+                        <tr>
+                            <th> Sr. </th>
+                            <th> Date </th>
+                            <th> VC </th>
+                            <th> Ref. Account </th>
+                            <th> Remarks </th>
+                            
+                            <th class="sar-th"> SAR </th>
+                            <th class=" pkr-th"> PKR </th>
+                            <th> Action </th>
+                        </tr>
+    
+                        @foreach ($data as $index => $vouchers)
+                        <tr>
+                            <td> {{ (int) $index + 1 }} </td>
+                            <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d M') }} </td>
+                            <td> {{$vouchers->voucherPrefix}} </td>
+                            <td class="left"> {{$vouchers->drAcTitle}} </td>
+                            <td class="left"> {{$vouchers->remarks}} </td>
+                            
+                            <td class="right">{!! $vouchers->debitSR == 0 ? '&nbsp;' : number_format($vouchers->debitSR, 0, '.', ',') !!}</td>
+                            <td class="right">{!! $vouchers->debit == 0 ? '&nbsp;' : number_format($vouchers->debit, 2, '.', ',') !!}</td>
+                            <td>
+                                <a class="btn btn-success" href="{{url('edit_cpv', $vouchers->voucherId)}}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <a class="btn btn-danger" onclick="confirmation(event)" href="{{url('delete_voucher', $vouchers->voucherId)}}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>                        
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
+                
             </div>
     <script>
       // Set current date in the date input field

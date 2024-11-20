@@ -32,7 +32,6 @@
 
         .table_deg {
             width: 100%;
-            max-width: 1000px;
             margin-top: 20px;
             border: 2px solid yellowgreen;
             border-radius: 5px;
@@ -46,7 +45,7 @@
             background-color: darkcyan;
             border: 1px solid skyblue;
             padding: 6px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
             color: white;
         }
@@ -54,7 +53,7 @@
         td {
             border: 1px solid skyblue;
             padding: 6px;
-            font-size: 12px;
+            font-size: 14px;
             color: white;
         }
 
