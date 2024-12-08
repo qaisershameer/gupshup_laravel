@@ -7,6 +7,7 @@
           height: 45px;
           padding: 10px;
           font-size: 16px;
+          margin-right: 5px;
           box-sizing: border-box;
         }
         
@@ -16,6 +17,7 @@
           height: 45px;
           padding: 10px;
           font-size: 16px;
+          margin-right: 5px;
           box-sizing: border-box;
         }
 
@@ -35,8 +37,9 @@
         }
 
         .sar-th {
-            font-weight: bold; 
             background-color:deepskyblue;
+            /*font-style: italic;*/
+            font-weight: bold; 
             color: white;            
         }
         
@@ -49,8 +52,9 @@
                 
         .pkr-th {
             background-color: mediumSeaGreen;
-            color: white; 
+            /*font-style: italic;*/
             font-weight: bold;
+            color: white; 
         }
         
         .pkr-total {
@@ -71,10 +75,11 @@
         th {
           background-color: darkcyan;
           border: 1px solid skyblue;
-          padding: 6px;
-          font-size: 12px;
+          /*font-style: italic;*/
           font-weight: bold;
           color: white;
+          font-size: 12px;
+          padding: 6px;
         }
 
         td {
@@ -113,11 +118,26 @@
                         <input type="date" id="dateInputTo" name="dateTo" value="{{ old('dateTo', $dateto) }}" required>
 
                         <!--Sumbit Button -->
-                        <button class="btn btn-success" type="submit"><i class="fas fa-search"></i> View Ledger</button>
-                        
+                        <button class="btn btn-success" type="submit"><i class="fas fa-search"></i> View</button>
                     </div>
-
                 </form>
+
+                <div style="display: flex; gap: 5px; padding: 5px; align-items: center;">
+                    <!--Separate form for PDF generation -->
+                    <form action="{{ url('pdf_ledger') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="acId" value="{{ $acId }}">
+                        <input type="hidden" name="dateFrom" value="{{ $datefrom }}">
+                        <input type="hidden" name="dateTo" value="{{ $dateto }}">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-print"></i> PDF</button>
+                    </form>
+                </div>
+            
+            </div>
+            
+            <div>
+                
+            </div>                
             
         </div>
           
@@ -127,13 +147,13 @@
                 <thead>
                     <tr>
                         <th> Sr. </th>
-                        <th> Date </th>
                         <th> VC </th>
+                        <th> Date </th>
                         <th> Remarks </th>
                         <th> Ref. Account </th>
                         
-                        <th colspan="2">SAR</th>
-                        <th colspan="2">PKR</th>
+                        <th colspan="3">SAR</th>
+                        <th colspan="3">PKR</th>
 
                     </tr>
                     
@@ -142,9 +162,11 @@
                         
                         <td class="sar-th">Dr</td>
                         <td class="sar-th">Cr</td>
+                        <td class="sar-th">Bal</td>
 
                         <td class="pkr-th">Dr</td>
                         <td class="pkr-th">Cr</td>
+                        <td class="pkr-th">Bal</td>
 
                     </tr>
                     
@@ -152,44 +174,64 @@
                 
                 <tbody>
 
+                    <tr>
+                        <th colspan="5" class="right">Opening Balance : </th>
+                        
+                        <!-- Sar Total Cells -->
+                        <td class="sar-total"> 
+                            {!! (count($balance) > 0 && $balance[0]->balanceSR >= 0) ? number_format($balance[0]->balanceSR, 0, '.', ',') : 0 !!} 
+                        </td>
+                        
+                        <td class="sar-total"> 
+                            {!! (count($balance) > 0 && $balance[0]->balanceSR < 0) ? number_format($balance[0]->balanceSR, 0, '.', ',') : 0 !!} 
+                        </td>
+                        
+                        <th class="sar-total"> 
+                            {!! (count($balance) > 0 && $balance[0]->balanceSR >= 0)
+                                    ? number_format($balance[0]->balanceSR, 0, '.', ',')
+                                    : (count($balance) > 0 ? number_format($balance[0]->balanceSR, 0, '.', ',') : 0) !!} 
+                        </th>
+                    
+                        <!-- Pkr Total Cells -->
+                        <td class="pkr-total"> 
+                            {!! (count($balance) > 0 && $balance[0]->balancePK >= 0) ? number_format($balance[0]->balancePK, 1, '.', ',') : 0 !!}
+                        </td>
+                    
+                        <td class="pkr-total"> 
+                            {!! (count($balance) > 0 && $balance[0]->balancePK < 0) ? number_format($balance[0]->balancePK, 1, '.', ',') : 0 !!} 
+                        </td>
+                    
+                        <th class="pkr-total"> 
+                            {!! (count($balance) > 0 && $balance[0]->balancePK >= 0)
+                                    ? number_format($balance[0]->balancePK, 1, '.', ',')
+                                    : (count($balance) > 0 ? number_format($balance[0]->balancePK, 1, '.', ',') : 0) !!} 
+                        </th>
+                    </tr>
+ 
+                    
                     <?php 
+                    
+                        $debit = 0;
+                        $credit = 0;
+                        
+                        $debitSR = 0;
+                        $creditSR = 0;
+                        
                         $sum_debit = 0;
                         $sum_credit = 0;
                         
                         $sum_debitSR = 0;
                         $sum_creditSR = 0;
-                        
-                        $bal_SAR = 0;
-                        $bal_PKR = 0;
 
                         $sum_SAR = 0;
                         $sum_PKR = 0;
                         
+                        $running_SR = count($balance) > 0 ? $balance->first()->balanceSR : 0;
+                        $running_PK = count($balance) > 0 ? $balance->first()->balancePK : 0;
+                        
                     ?>
-                    
+
                     @foreach ($data as $index => $vouchers)
-                    <tr>
-                        <td> {{ (int) $index + 1 }} </td>
-                        <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d M') }} </td>
-                        <td> {{$vouchers->voucherPrefix}} </td>
-                        
-                        <td class="left"> {{$vouchers->remarks}} </td>
-                        
-                        <td class="left"> {{$acId == $vouchers->drAcId ? $vouchers->crAcTitle : $vouchers->drAcTitle }}
-                        </td>
-
-                        <!--<td class="right"> {!! $vouchers->debitSR == 0 ? '&nbsp;' : number_format($vouchers->debitSR, 0, '.', ',') !!} </td>-->
-                        <!--<td class="right">{!! $vouchers->creditSR == 0 ? '&nbsp;' : number_format($vouchers->creditSR, 0, '.', ',') !!}</td>-->
-                        <!--<td class="right">{!! $vouchers->debit == 0 ? '&nbsp;' : number_format($vouchers->debit, 2, '.', ',') !!}</td>-->
-                        <!--<td class="right">{!! $vouchers->credit == 0 ? '&nbsp;' : number_format($vouchers->credit, 2, '.', ',') !!}</td>-->
-                        
-                        <td class="right">{!! ($acId == $vouchers->drAcId ? number_format($vouchers->debitSR, 0, '.', ',') : '&nbsp;' ) !!} </td>
-                        <td class="right">{!! ($acId == $vouchers->crAcId ? number_format($vouchers->creditSR, 0, '.', ',') : '&nbsp;' ) !!} </td>
-                        
-                        <td class="right">{!! ($acId == $vouchers->drAcId ? number_format($vouchers->debit, 2, '.', ',') : '&nbsp;' ) !!} </td>
-                        <td class="right">{!! ($acId == $vouchers->crAcId ? number_format($vouchers->credit, 2, '.', ',') : '&nbsp;' ) !!} </td>
-
-                    </tr>
 
                     <?php
                     
@@ -197,18 +239,27 @@
                             
                             if ($acId == $vouchers->drAcId) {
                                 
+                                $debit = $vouchers->debit;
+                                $debitSR = $vouchers->debitSR;
+                                
+                                $credit = 0;
+                                $creditSR = 0;
+                                
                                 $sum_debitSR += $vouchers->debitSR;
                                 $sum_debit += $vouchers->debit;
                                 
                                 $sum_creditSR = $sum_creditSR;
                                 $sum_credit = $sum_credit;
 
-                                // $sum_SAR = $sum_SAR;
-                                // $sum_PKR = $sum_PKR;
-                                
-                                
+
                             } else {
                                 
+                                $debit = 0;
+                                $debitSR = 0;
+
+                                $credit = $vouchers->credit;
+                                $creditSR = $vouchers->creditSR;
+
                                 $sum_debitSR = $sum_debitSR;
                                 $sum_debit = $sum_debit;
                                 
@@ -219,22 +270,48 @@
     
                         } else {
 
+                            $debit = $vouchers->debit;
+                            $debitSR = $vouchers->debitSR;
+
+                            $credit = $vouchers->credit;
+                            $creditSR = $vouchers->creditSR;
+
                             $sum_debitSR += $vouchers->debitSR;
                             $sum_creditSR += $vouchers->creditSR;
 
                             $sum_debit += $vouchers->debit;
                             $sum_credit += $vouchers->credit;
 
-                            // $sum_SAR += ($vouchers->debitSR - $vouchers->creditSR);
-                            // $sum_PKR += ($vouchers->debit - $vouchers->credit);
-                            
                         }
                         
+                        $running_SR += $debitSR - $creditSR;
+                        $running_PK += $debit - $credit;
+                            
                         $sum_SAR = $sum_debitSR - $sum_creditSR;
                         $sum_PKR = $sum_debit - $sum_credit;
 
                     ?>
                     
+                    <tr>
+                        <td> {{ (int) $index + 1 }} </td>
+                        <td> {{$vouchers->voucherPrefix}} </td>
+                        <td> {{ \Carbon\Carbon::parse($vouchers->voucherDate)->format('d M') }} </td>
+                        
+                        <td class="left"> {{$vouchers->remarks}} </td>
+                        
+                        <td class="left"> {{$acId == $vouchers->drAcId ? $vouchers->crAcTitle : $vouchers->drAcTitle }}
+                        </td>
+
+                        <td class="right">{!! ($acId == $vouchers->drAcId ? number_format($vouchers->debitSR, 0, '.', ',') : '&nbsp;' ) !!} </td>
+                        <td class="right">{!! ($acId == $vouchers->crAcId ? number_format($vouchers->creditSR, 0, '.', ',') : '&nbsp;' ) !!} </td>
+                        <td class="sar-total">{!! number_format($running_SR, 0, '.', ',') !!} </td>
+                        
+                        <td class="right">{!! ($acId == $vouchers->drAcId ? number_format($vouchers->debit, 1, '.', ',') : '&nbsp;' ) !!} </td>
+                        <td class="right">{!! ($acId == $vouchers->crAcId ? number_format($vouchers->credit, 1, '.', ',') : '&nbsp;' ) !!} </td>
+                        <td class="pkr-total">{!! number_format($running_PK, 1, '.', ',') !!} </td>
+
+                    </tr>
+
                     @endforeach
                     
                     <!--<tr style="background-color: yellow;">-->
@@ -244,17 +321,12 @@
 
                         <td class="sar-total">{{ number_format($sum_debitSR, 0, '.', ',') }}</td>
                         <td class="sar-total">{{ number_format($sum_creditSR, 0, '.', ',') }}</td>
+                        <td class="sar-total">{{ number_format($running_SR, 0, '.', ',') }}</td>
 
                         <td class="pkr-total">{{ number_format($sum_debit, 2, '.', ',') }}</td>
                         <td class="pkr-total">{{ number_format($sum_credit, 2, '.', ',') }}</td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="4"></td>
-                        <th style="text-align:right;"> B/F Balance : </th>
-                    
-                        <th colspan="2" class="right">{{ number_format($sum_SAR, 0, '.', ',') }}</th>
-                        <th colspan="2" class="right">{{ number_format($sum_PKR, 2, '.', ',') }}</th>
+                        <td class="pkr-total">{{ number_format($running_PK, 1, '.', ',') }}</td>
+                        
                     </tr>
                     
                 </tbody>
@@ -262,7 +334,7 @@
             </table>
         </div>
             
-        </div>
+    </div>
     
     
     <script>

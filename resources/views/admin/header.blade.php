@@ -105,7 +105,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6"><strong class="text-uppercase">Settings</strong>
                   <ul class="list-unstyled mb-3">
-                    <li><a href="{{url('/home')}}">DarK Theme</a></li>
+                    li><a href="{{ route('profile.show') }}">User Profile</a></li>
                     <li><a href="{{url('/home')}}">Blocked Users</a></li>
                     <li><a href="{{url('/home')}}">Date Closing</a></li>
                     <li><a href="{{url('/home')}}">Backup</a></li>

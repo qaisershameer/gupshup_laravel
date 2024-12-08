@@ -80,7 +80,7 @@ class AccountsController extends BaseController
      */
     public function show(string $id)
     {
-        $data['post'] = Accounts::select('acId', 'acTitle', 'uId', 'currencyId', 'accTypeId', 'parentId', 'areaId')->where('acId', $id)->first();
+        $data['post'] = Accounts::select('acId', 'acTitle', 'email', 'mobile', 'uId', 'currencyId', 'accTypeId', 'parentId', 'areaId')->where('acId', $id)->first();
 
         if (!$data['post']) {
             return response()->json([

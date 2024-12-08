@@ -124,6 +124,7 @@ use App\Http\Controllers\AdminController;
 
     Route::get('/ac_ledger',[AdminController::class,'ac_ledger']);
     Route::post('/ac_ledger',[AdminController::class,'ac_ledger']);
+    Route::post('/pdf_ledger',[AdminController::class,'pdf_ledger']);
     
     Route::get('/cash_book',[AdminController::class,'cash_book']);
     Route::post('/cash_book',[AdminController::class,'cash_book']);
