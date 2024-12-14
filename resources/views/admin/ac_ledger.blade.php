@@ -114,8 +114,8 @@
                         </select>
                         
                         <!--Input for Date From To -->
-                        <input type="date" id="dateInputFrom" name="dateFrom" value="{{ old('dateFrom', $datefrom) }}" required>
-                        <input type="date" id="dateInputTo" name="dateTo" value="{{ old('dateTo', $dateto) }}" required>
+                        <input type="date" id="dateFrom" name="dateFrom" value="{{ $datefrom }}" required>
+                        <input type="date" id="dateTo" name="dateTo" value="{{ $dateto }}" required>
 
                         <!--Sumbit Button -->
                         <button class="btn btn-success" type="submit"><i class="fas fa-search"></i> View</button>
@@ -337,7 +337,7 @@
     </div>
     
     
-    <script>
+    {{-- <script>
       // Set current date in the date input field
       const now = new Date();
       const day = String(now.getDate()).padStart(2, '0');
@@ -350,6 +350,6 @@
       document.getElementById('dateInputFrom').value = startDate;
       document.getElementById('dateInputTo').value = currentDate;
       
-    </script>
+    </script> --}}
 
 @endsection
