@@ -4,33 +4,34 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 
-use Illuminate\Http\Request;
+use Dompdf\Dompdf;
 
-use Illuminate\Support\Facades\DB;
+use Dompdf\Options;
 
-use Illuminate\Support\Facades\Auth;
+use App\Models\Area;
+
+use App\Models\Book;
 
 use App\Models\Food;
 
 use App\Models\Order;
 
-use App\Models\Book;
-
-use App\Models\Currency;
-
 use App\Models\AccType;
-
-use App\Models\AccParent;
 
 use App\Models\Accounts;
 
-use App\Models\Area;
+use App\Models\Currency;
 
 use App\Models\Vouchers;
 
-use Dompdf\Dompdf;
+use App\Models\AccParent;
 
-use Dompdf\Options;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class AdminController extends Controller
 {
@@ -1125,8 +1126,17 @@ class AdminController extends Controller
         
         $uId = Auth::id(); // Get the currently authenticated user's ID
         
-        $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
-        $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
+        // Parse date from request and format them
+        if($request->dateFrom == ""){
+            $currentYear = Carbon::now()->year;
+            $datefrom = $currentYear.'-01-01';
+            $dateto = Carbon::now()->format('Y-m-d');
+            
+        }else{
+            $datefrom = $request->dateFrom;
+            $dateto = $request->dateTo;  
+        }
+
         $acId = $request->acId;
         $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
         
@@ -1134,7 +1144,8 @@ class AdminController extends Controller
         $acTitle = $selectedAccount ? $selectedAccount->acTitle : ' !!! ';
         
         $balance = $this->ledger_balance($uId, $acId, 'ALL', 'ALL', $datefrom, $dateto);
-        
+
+      
         // dd($datefrom, $datefrom);
         
         $data = [];
@@ -1170,91 +1181,118 @@ class AdminController extends Controller
                             ->orderBy('vouchers.voucherDate', 'asc')
                             ->orderBy('vouchers.updated_at', 'asc')
                             ->get();
+        }
+
+        $routeName = Route::currentRouteName();
+        if($routeName == 'pdf_ledger'){
+            
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isPhpEnabled', true);
+            $dompdf = new Dompdf($options);
+    
+            // Load HTML content for PDF
+            $html = view('admin.ac_ledger_pdf', compact('data', 'accounts', 'acId', 'acTitle', 'datefrom', 'dateto', 'balance'))->render();
+    
+            // Load HTML to Dompdf
+            $dompdf->loadHtml($html);
+    
+            // (Optional) Set paper size
+            $dompdf->setPaper('A4', 'portrait');
+    
+            // Render the PDF (first pass)
+            $dompdf->render();
+    
+            // Download the generated PDF
+            return $dompdf->stream('ac_ledger_pdf.pdf');
         }
        
         return view('admin.ac_ledger', compact('data','accounts','acId','datefrom','dateto', 'balance')); 
     }
     
-    public function pdf_ledger(Request $request)
-    {
+    // public function pdf_ledger(Request $request)
+    // {
+    //     $routeName = Route::currentRouteName();
+    //     $routeAction = Route::currentRouteAction();
+    //     $currentUrl = url()->current();
+    //     dd($routeAction,$currentUrl,$routeName);
+    //     // Check if user is authenticated
+    //     if (!Auth::check()) {return redirect()->route('login');}
         
-        // Check if user is authenticated
-        if (!Auth::check()) {return redirect()->route('login');}
+    //     $uId = Auth::id(); // Get the currently authenticated user's ID
         
-        $uId = Auth::id(); // Get the currently authenticated user's ID
-        
-        $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
-        $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
-        $acId = $request->acId;
-        $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
+    //     $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
+    //     $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
+    //     $acId = $request->acId;
+    //     $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
 
-        $selectedAccount = $accounts->firstWhere('acId', $acId);
-        $acTitle = $selectedAccount ? $selectedAccount->acTitle : ' !!! ';
+    //     $selectedAccount = $accounts->firstWhere('acId', $acId);
+    //     $acTitle = $selectedAccount ? $selectedAccount->acTitle : ' !!! ';
         
-        $balance = $this->ledger_balance($uId, $acId, 'ALL', 'ALL', $datefrom, $dateto);
+    //     $balance = $this->ledger_balance($uId, $acId, 'ALL', 'ALL', $datefrom, $dateto);
         
-        // dd($datefrom, $datefrom);
+    //     // dd($datefrom, $datefrom);
         
-        $data = [];
-        if(!empty($acId)){
-            $data = DB::table('vouchers')
-                       ->select('vouchers.voucherId',
-                                'vouchers.voucherDate',
-                                'vouchers.voucherPrefix',
-                                'vouchers.remarks',
-                                'vouchers.drAcId',
-                                'vouchers.crAcId',
-                                'vouchers.debit',
-                                'vouchers.credit',
-                                'vouchers.debitSR',
-                                'vouchers.creditSR',
-                                'vouchers.uId',
-                                'accounts_dr.acTitle as drAcTitle',
-                                'acctype_dr.accTypeTitle as drAcTypeTitle',
-                                'accounts_cr.acTitle as crAcTitle',
-                                'acctype_cr.accTypeTitle as crAcTypeTitle')
-                                // ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
-                                ->leftJoin('accounts as accounts_dr', 'vouchers.drAcId', '=', 'accounts_dr.acId')
-                                ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
-                                ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
-                                ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
-                            ->where('vouchers.uId', $uId)
-                            ->where(function($query) use ($acId)
-                            {$query
-                                ->where('vouchers.drAcId', $acId)
-                                ->orWhere('vouchers.crAcId', $acId);
-                            })                                            
-                            ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
-                            ->orderBy('vouchers.voucherDate', 'asc')
-                            ->orderBy('vouchers.updated_at', 'asc')
-                            ->get();
-        }
+    //     $data = [];
+    //     if(!empty($acId)){
+    //         $data = DB::table('vouchers')
+    //                    ->select('vouchers.voucherId',
+    //                             'vouchers.voucherDate',
+    //                             'vouchers.voucherPrefix',
+    //                             'vouchers.remarks',
+    //                             'vouchers.drAcId',
+    //                             'vouchers.crAcId',
+    //                             'vouchers.debit',
+    //                             'vouchers.credit',
+    //                             'vouchers.debitSR',
+    //                             'vouchers.creditSR',
+    //                             'vouchers.uId',
+    //                             'accounts_dr.acTitle as drAcTitle',
+    //                             'acctype_dr.accTypeTitle as drAcTypeTitle',
+    //                             'accounts_cr.acTitle as crAcTitle',
+    //                             'acctype_cr.accTypeTitle as crAcTypeTitle')
+    //                             // ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
+    //                             ->leftJoin('accounts as accounts_dr', 'vouchers.drAcId', '=', 'accounts_dr.acId')
+    //                             ->leftJoin('acctype as acctype_dr', 'accounts_dr.accTypeId', '=', 'acctype_dr.accTypeId')
+    //                             ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')
+    //                             ->leftJoin('acctype as acctype_cr', 'accounts_cr.accTypeId', '=', 'acctype_cr.accTypeId')
+    //                         ->where('vouchers.uId', $uId)
+    //                         ->where(function($query) use ($acId)
+    //                         {$query
+    //                             ->where('vouchers.drAcId', $acId)
+    //                             ->orWhere('vouchers.crAcId', $acId);
+    //                         })                                            
+    //                         ->whereBetween('vouchers.voucherDate', [$datefrom, $dateto])
+    //                         ->orderBy('vouchers.voucherDate', 'asc')
+    //                         ->orderBy('vouchers.updated_at', 'asc')
+    //                         ->get();
+    //     }
        
-        // $pdf = pdf::loadView('admin.ac_ledger_pdf', compact('data', 'accounts','acId', 'acTitle', 'datefrom','dateto'));
-        // return $pdf->download('ac_ledger_pdf.pdf');
+    //     // $pdf = pdf::loadView('admin.ac_ledger_pdf', compact('data', 'accounts','acId', 'acTitle', 'datefrom','dateto'));
+    //     // return $pdf->download('ac_ledger_pdf.pdf');
         
-        // Initialize Dompdf with options
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isPhpEnabled', true);
-        $dompdf = new Dompdf($options);
+    //     // Initialize Dompdf with options
+    //     $options = new Options();
+    //     $options->set('isHtml5ParserEnabled', true);
+    //     $options->set('isPhpEnabled', true);
+    //     $dompdf = new Dompdf($options);
 
-        // Load HTML content for PDF
-        $html = view('admin.ac_ledger_pdf', compact('data', 'accounts', 'acId', 'acTitle', 'datefrom', 'dateto', 'balance'))->render();
+    //     // Load HTML content for PDF
+    //     $html = view('admin.ac_ledger_pdf', compact('data', 'accounts', 'acId', 'acTitle', 'datefrom', 'dateto', 'balance'))->render();
 
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
+    //     // Load HTML to Dompdf
+    //     $dompdf->loadHtml($html);
 
-        // (Optional) Set paper size
-        $dompdf->setPaper('A4', 'portrait');
+    //     // (Optional) Set paper size
+    //     $dompdf->setPaper('A4', 'portrait');
 
-        // Render the PDF (first pass)
-        $dompdf->render();
+    //     // Render the PDF (first pass)
+    //     $dompdf->render();
 
-        // Download the generated PDF
-        return $dompdf->stream('ac_ledger_pdf.pdf');
+    //     // Download the generated PDF
+    //     return $dompdf->stream('ac_ledger_pdf.pdf');
     
-    }
+    // }
     
     //////////////////// CASH BOOK REPORT ////////////////////
     
@@ -1265,8 +1303,16 @@ class AdminController extends Controller
         
         $uId = Auth::id(); // Get the currently authenticated user's ID
         
-        $datefrom = $request->has('dateFrom') ? Carbon::parse($request->dateFrom)->format('Y-m-d') : now()->format('Y-m-d');
-        $dateto = $request->has('dateTo') ? Carbon::parse($request->dateTo)->format('Y-m-d') : now()->format('Y-m-d');
+        // Parse date from request and format them
+        if($request->dateFrom == ""){
+            $currentYear = Carbon::now()->year;
+            $datefrom = $currentYear.'-01-01';
+            $dateto = Carbon::now()->format('Y-m-d');
+            
+        }else{
+            $datefrom = $request->dateFrom;
+            $dateto = $request->dateTo;  
+        }
     
         $data = [];
         if(!empty($datefrom))
@@ -1327,8 +1373,15 @@ class AdminController extends Controller
         // $areaId = $request->areaId ?? 'ALL';
     
         // Parse date from request and format them
-        $datefrom = Carbon::parse($request->dateFrom)->format('Y-m-d');
-        $dateto = Carbon::parse($request->dateTo)->format('Y-m-d');
+        if($request->dateFrom == ""){
+            $currentYear = Carbon::now()->year;
+            $datefrom = $currentYear.'-01-01';
+            $dateto = Carbon::now()->format('Y-m-d');
+            
+        }else{
+            $datefrom = $request->dateFrom;
+            $dateto = $request->dateTo;  
+        }
 
         $query = DB::table(DB::raw("( 
             SELECT
