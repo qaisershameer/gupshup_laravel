@@ -49,88 +49,88 @@ use App\Http\Controllers\AdminController;
 
 ///// Currency Table Controller Form Routes /////
 
-    Route::get('/currency',[AdminController::class,'view_currency']);
-    Route::post('/add_currency',[AdminController::class,'add_currency']);
+    Route::get('/currency',[AdminController::class,'view_currency'])->name('view_currency');
+    Route::post('/add_currency',[AdminController::class,'add_currency'])->name('add_currency');
 
-    Route::get('/edit_currency/{currencyId}',[AdminController::class,'edit_currency']);
-    Route::post('/update_currency/{currencyId}',[AdminController::class,'update_currency']);
+    Route::get('/edit_currency/{currencyId}',[AdminController::class,'edit_currency'])->name('edit_currency');
+    Route::post('/update_currency/{currencyId}',[AdminController::class,'update_currency'])->name('update_currency');
 
-    Route::get('/delete_currency/{currencyId}',[AdminController::class,'delete_currency']);
+    Route::get('/delete_currency/{currencyId}',[AdminController::class,'delete_currency'])->name('delete_currency');
 
 ///// Area Table Controller Form Routes /////
 
-    Route::get('/area',[AdminController::class,'view_area']);
-    Route::post('/add_area',[AdminController::class,'add_area']);
+    Route::get('/area',[AdminController::class,'view_area'])->name('view_area');
+    Route::post('/add_area',[AdminController::class,'add_area'])->name('add_area');
 
-    Route::get('/edit_area/{areaId}',[AdminController::class,'edit_area']);
-    Route::post('/update_area/{areaId}',[AdminController::class,'update_area']);
+    Route::get('/edit_area/{areaId}',[AdminController::class,'edit_area'])->name('edit_area');
+    Route::post('/update_area/{areaId}',[AdminController::class,'update_area'])->name('update_area');
 
-    Route::get('/delete_area/{areaId}',[AdminController::class,'delete_area']);
+    Route::get('/delete_area/{areaId}',[AdminController::class,'delete_area'])->name('delete_area');
 
 ///// Accounts Type Table Controller Form Routes /////
 
-    Route::get('/acctype',[AdminController::class,'view_acctype']);
-    Route::post('/add_acctype',[AdminController::class,'add_acctype']);
+    Route::get('/acctype',[AdminController::class,'view_acctype'])->name('view_acctype');
+    Route::post('/add_acctype',[AdminController::class,'add_acctype'])->name('add_acctype');
 
-    Route::get('/edit_acctype/{accTypeId}',[AdminController::class,'edit_acctype']);
-    Route::post('/update_acctype/{accTypeId}',[AdminController::class,'update_acctype']);
+    Route::get('/edit_acctype/{accTypeId}',[AdminController::class,'edit_acctype'])->name('edit_acctype');
+    Route::post('/update_acctype/{accTypeId}',[AdminController::class,'update_acctype'])->name('update_acctype');
 
-    Route::get('/delete_acctype/{accTypeId}',[AdminController::class,'delete_acctype']);
+    Route::get('/delete_acctype/{accTypeId}',[AdminController::class,'delete_acctype'])->name('delete_acctype');
 
 ///// Accounts Parent Table Controller Form Routes /////
 
-    Route::get('/accparent',[AdminController::class,'view_accparent']);
-    Route::post('/add_accparent',[AdminController::class,'add_accparent']);
+    Route::get('/accparent',[AdminController::class,'view_accparent'])->name('view_accparent');
+    Route::post('/add_accparent',[AdminController::class,'add_accparent'])->name('add_accparent');
 
-    Route::get('/edit_accparent/{parentId}',[AdminController::class,'edit_accparent']);
-    Route::post('/update_accparent/{parentId}',[AdminController::class,'update_accparent']);
+    Route::get('/edit_accparent/{parentId}',[AdminController::class,'edit_accparent'])->name('edit_accparent');
+    Route::post('/update_accparent/{parentId}',[AdminController::class,'update_accparent'])->name('update_accparent');
 
-    Route::get('/delete_accparent/{parentId}',[AdminController::class,'delete_accparent']);
+    Route::get('/delete_accparent/{parentId}',[AdminController::class,'delete_accparent'])->name('delete_accparent');
 
 ///// Accounts Table Controller Form Routes /////
 
-    Route::get('/accounts',[AdminController::class,'view_accounts']);
-    Route::post('/add_account',[AdminController::class,'add_account']);
+    Route::get('/accounts',[AdminController::class,'view_accounts'])->name('view_accounts');
+    Route::post('/add_account',[AdminController::class,'add_account'])->name('add_account');
 
-    Route::get('/edit_account/{acId}',[AdminController::class,'edit_account']);
-    Route::post('/update_account/{acId}',[AdminController::class,'update_account']);
+    Route::get('/edit_account/{acId}',[AdminController::class,'edit_account'])->name('edit_account');
+    Route::post('/update_account/{acId}',[AdminController::class,'update_account'])->name('update_account');
 
-    Route::get('/delete_account/{acId}',[AdminController::class,'delete_account']);
+    Route::get('/delete_account/{acId}',[AdminController::class,'delete_account'])->name('delete_account');
 
 ///// Vouchers Table Controller Form Routes /////
 
     // Route::get('/crv/{uid}/{voucherPrefix?}', [AdminController::class, 'view_vouchers']);
     // Route::get('/crv/{voucherPrefix}', [AdminController::class, 'view_vouchers']);
 
-    Route::get('/crv', [AdminController::class, 'view_vouchersCR']);
-    Route::get('/cpv', [AdminController::class, 'view_vouchersCP']);
-    Route::get('/jv', [AdminController::class, 'view_vouchersJV']);
+    Route::get('/crv', [AdminController::class, 'view_vouchersCR'])->name('view_vouchersCR');
+    Route::get('/cpv', [AdminController::class, 'view_vouchersCP'])->name('view_vouchersCP');
+    Route::get('/jv', [AdminController::class, 'view_vouchersJV'])->name('view_vouchersJV');
 
-    Route::post('/add_crv/{CR}',[AdminController::class,'add_voucher']);
-    Route::post('/add_cpv/{CP}',[AdminController::class,'add_voucher']);
-    Route::post('/add_jv/{JV}',[AdminController::class,'add_voucher']);
+    Route::post('/add_crv/{CR}',[AdminController::class,'add_voucher'])->name('add_voucher');
+    Route::post('/add_cpv/{CP}',[AdminController::class,'add_voucher'])->name('add_voucher');
+    Route::post('/add_jv/{JV}',[AdminController::class,'add_voucher'])->name('add_voucher');
 
-    Route::get('/edit_crv/{voucherId}',[AdminController::class,'edit_crv']);
-    Route::get('/edit_cpv/{voucherId}',[AdminController::class,'edit_cpv']);
-    Route::get('/edit_jv/{voucherId}',[AdminController::class,'edit_jv']);
+    Route::get('/edit_crv/{voucherId}',[AdminController::class,'edit_crv'])->name('edit_crv');
+    Route::get('/edit_cpv/{voucherId}',[AdminController::class,'edit_cpv'])->name('edit_cpv');
+    Route::get('/edit_jv/{voucherId}',[AdminController::class,'edit_jv'])->name('edit_jv');
 
-    Route::post('/update_crv/{voucherId}',[AdminController::class,'update_voucher']);
-    Route::post('/update_cpv/{voucherId}',[AdminController::class,'update_voucher']);
-    Route::post('/update_jv/{voucherId}',[AdminController::class,'update_voucher']);
+    Route::post('/update_crv/{voucherId}',[AdminController::class,'update_voucher'])->name('update_voucher');
+    Route::post('/update_cpv/{voucherId}',[AdminController::class,'update_voucher'])->name('update_voucher');
+    Route::post('/update_jv/{voucherId}',[AdminController::class,'update_voucher'])->name('update_voucher');
 
-    Route::get('/delete_voucher/{voucherId}',[AdminController::class,'delete_voucher']);    
+    Route::get('/delete_voucher/{voucherId}',[AdminController::class,'delete_voucher'])->name('delete_voucher');
 
 ///// Reports Controller Form Routes /////
 
-    Route::get('/ac_ledger',[AdminController::class,'ac_ledger']);
-    Route::post('/ac_ledger',[AdminController::class,'ac_ledger']);
-    Route::post('/pdf_ledger',[AdminController::class,'pdf_ledger']);
+    Route::get('/ac_ledger',[AdminController::class,'ac_ledger'])->name('ac_ledger');
+    Route::post('/ac_ledger',[AdminController::class,'ac_ledger'])->name('ac_ledger');
+    Route::post('/pdf_ledger',[AdminController::class,'ac_ledger'])->name('pdf_ledger');
     
-    Route::get('/cash_book',[AdminController::class,'cash_book']);
-    Route::post('/cash_book',[AdminController::class,'cash_book']);
+    Route::get('/cash_book',[AdminController::class,'cash_book'])->name('cash_book');
+    Route::post('/cash_book',[AdminController::class,'cash_book'])->name('cash_book');
     
-    Route::get('/trail_balance',[AdminController::class,'trail_balance']);
-    Route::post('/trail_balance',[AdminController::class,'trail_balance']);
+    Route::get('/trail_balance',[AdminController::class,'trail_balance'])->name('trail_balance');
+    Route::post('/trail_balance',[AdminController::class,'trail_balance'])->name('trail_balance');
 
 
 ///// Theme Default Routes /////
