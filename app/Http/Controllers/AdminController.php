@@ -31,6 +31,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Route;
 
 class AdminController extends Controller
@@ -1355,7 +1356,18 @@ class AdminController extends Controller
         if (!Auth::check()) { return redirect()->route('login'); }
         
         $uId = Auth::id(); // Get the currently authenticated user's ID
-        
+
+        // Parse date from request and format them
+        if($request->dateFrom == ""){
+            $currentYear = Carbon::now()->year;
+            $datefrom = $currentYear.'-01-01';
+            $dateto = Carbon::now()->format('Y-m-d');
+            
+        }else{
+            $datefrom = $request->dateFrom;
+            $dateto = $request->dateTo;  
+        }
+                
         // Get the accounts for the user
         $accounts = Accounts::where('uId', $uId)->orderBy('acTitle')->get();
         $accType = AccType::where('uId', $uId)->orderBy('accTypeId')->get();
@@ -1371,17 +1383,6 @@ class AdminController extends Controller
         
         // $accTypeId = $request->accTypeId ?? 'ALL';
         // $areaId = $request->areaId ?? 'ALL';
-    
-        // Parse date from request and format them
-        if($request->dateFrom == ""){
-            $currentYear = Carbon::now()->year;
-            $datefrom = $currentYear.'-01-01';
-            $dateto = Carbon::now()->format('Y-m-d');
-            
-        }else{
-            $datefrom = $request->dateFrom;
-            $dateto = $request->dateTo;  
-        }
 
         $query = DB::table(DB::raw("( 
             SELECT
